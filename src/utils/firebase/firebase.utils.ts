@@ -12,13 +12,13 @@ import {
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAmZe14_k6m6yL9dCP-M2U39Taip7OJBC0",
-  authDomain: "crwn-db-8f405.firebaseapp.com",
-  projectId: "crwn-db-8f405",
-  storageBucket: "crwn-db-8f405.firebasestorage.app",
-  messagingSenderId: "250402705481",
-  appId: "1:250402705481:web:07e6e11fae0163a7eeaf98",
-  measurementId: "G-11VLQBTH3B",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -55,7 +55,8 @@ export const createUserDocumentFromAuth = async (
         ...additionalInformation,
       });
     } catch (error) {
-      console.log("error creating the user", error);
+      console.error("error creating the user", error);
+      throw error;
     }
   }
   return userDocRef;

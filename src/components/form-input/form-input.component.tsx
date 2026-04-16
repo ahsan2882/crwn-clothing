@@ -26,7 +26,7 @@ export default function FormInput({ label, inputOptions }: FormInputProps) {
       {label && (
         <label
           htmlFor={inputName}
-          className={`${inputType || inputName || value ? "shrink" : ""} form-input-label`}
+          className={`${value ? "shrink" : ""} form-input-label`}
         >
           {label}
         </label>
