@@ -11,14 +11,22 @@ import {
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
+const getRequiredEnv = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing required Firebase env var: ${key}`);
+  }
+  return value;
+};
+
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+  apiKey: getRequiredEnv("REACT_APP_FIREBASE_API_KEY"),
+  authDomain: getRequiredEnv("REACT_APP_AUTH_DOMAIN"),
+  projectId: getRequiredEnv("REACT_APP_PROJECT_ID"),
+  storageBucket: getRequiredEnv("REACT_APP_STORAGE_BUCKET"),
+  messagingSenderId: getRequiredEnv("REACT_APP_MESSAGING_SENDER_ID"),
+  appId: getRequiredEnv("REACT_APP_APP_ID"),
+  measurementId: getRequiredEnv("REACT_APP_MEASUREMENT_ID"),
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
