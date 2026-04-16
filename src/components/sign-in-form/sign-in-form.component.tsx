@@ -23,8 +23,7 @@ export default function SignInForm() {
 
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithGooglePopup();
-      await createUserDocumentFromAuth(user);
+      await signInWithGooglePopup();
     } catch (error) {
       console.error("Google sign-in failed", error);
     }
