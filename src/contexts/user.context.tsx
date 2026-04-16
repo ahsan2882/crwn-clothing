@@ -28,9 +28,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const value = { currentUser, setCurrentUser };
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user) => {
+    const unsubscribe = onAuthStateChangedListener((user: User | null) => {
       if (user) {
-        createUserDocumentFromAuth(user);
+        createUserDocumentFromAuth(user).catch((error) => {
+          console.error("Failed to create/sync user document", error);
+        });
       }
       setCurrentUser(user);
     });
