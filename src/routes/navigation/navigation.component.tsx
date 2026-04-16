@@ -6,12 +6,16 @@ import { UserContext } from "../../contexts/user.context";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 
 export default function Navigation() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const signOutHandler = async () => {
-    await signOutUser();
-    setCurrentUser(null);
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error("Sign out failed", error);
+    }
   };
+
   return (
     <>
       <div className="navigation">
@@ -23,10 +27,9 @@ export default function Navigation() {
             SHOP
           </Link>
           {currentUser ? (
-            <span className="nav-link" onClick={signOutHandler}>
-              {" "}
-              SIGN OUT{" "}
-            </span>
+            <button type="button" className="nav-link" onClick={signOutHandler}>
+              SIGN OUT
+            </button>
           ) : (
             <Link className="nav-link" to="/auth">
               SIGN IN
