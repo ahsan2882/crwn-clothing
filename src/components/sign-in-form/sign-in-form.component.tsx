@@ -22,22 +22,22 @@ export default function SignInForm() {
   const { email, password } = formFields;
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    try {
+      const { user } = await signInWithGooglePopup();
+      await createUserDocumentFromAuth(user);
+    } catch (error) {
+      console.error("Google sign-in failed", error);
+    }
   };
 
   const onSubmitHandler = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
-        email,
-        password,
-      );
-      console.log(response);
+      await signInAuthUserWithEmailAndPassword(email, password);
       resetFormFields();
     } catch (error) {
       switch (error instanceof FirebaseError && error.code) {
-        case "auth/wrong-password":
+        case "auth/invalid-credential":
           alert("incorrect password for email");
           break;
         case "auth/user-not-found":
@@ -58,7 +58,7 @@ export default function SignInForm() {
     setFormFields({ ...formFields, [name]: value });
   };
   return (
-    <div className="sign-up-container">
+    <div className="sign-in-container">
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={onSubmitHandler}>
