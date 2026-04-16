@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import "./button.styles.scss";
 
 const BUTTON_TYPE_CLASSES = {
@@ -6,7 +7,7 @@ const BUTTON_TYPE_CLASSES = {
 };
 
 interface ButtonProps {
-  children: any;
+  children: ReactNode;
   type: "button" | "submit" | "reset";
   buttonStyle?: keyof typeof BUTTON_TYPE_CLASSES;
   onClickHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void;
