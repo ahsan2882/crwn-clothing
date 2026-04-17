@@ -26,7 +26,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         buttonStyle="inverted"
         onClickHandler={onAddToCartHandler}
       >
-        Add to card
+        Add to cart
       </Button>
     </div>
   );

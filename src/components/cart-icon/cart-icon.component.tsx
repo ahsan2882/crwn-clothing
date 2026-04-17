@@ -7,12 +7,14 @@ import { CartContext } from "../../contexts/cart.context";
 export default function CartIcon() {
   const { setIsCartOpen, cartCount } = useContext(CartContext);
   return (
-    <div className="cart-icon-container">
-      <ShoppingIcon
-        className="shopping-icon"
-        onClick={() => setIsCartOpen((state) => !state)}
-      />
+    <button
+      type="button"
+      className="cart-icon-container"
+      aria-label={`Open cart, ${cartCount} items`}
+      onClick={() => setIsCartOpen((state) => !state)}
+    >
+      <ShoppingIcon className="shopping-icon" />
       <span className="item-count">{cartCount}</span>
-    </div>
+    </button>
   );
 }
