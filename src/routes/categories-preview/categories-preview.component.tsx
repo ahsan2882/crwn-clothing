@@ -8,8 +8,7 @@ export default function CategoriesPreview() {
 
   return (
     <>
-      {Object.keys(categoriesMap).map((title) => {
-        const products = categoriesMap[title];
+      {Object.entries(categoriesMap).map(([title, products]) => {
         return (
           <CategoryPreview key={title} title={title} products={products} />
         );

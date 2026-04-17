@@ -28,7 +28,6 @@ export const CategoriesProvider = ({ children }: { children: ReactNode }) => {
         setCategoriesMap(categoryMap);
       } catch (error) {
         console.error(error);
-        throw error;
       }
     };
 

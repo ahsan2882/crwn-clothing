@@ -79,7 +79,9 @@ export const getCategoriesAndDocuments = async (
   const categoryMap = querySnapshot.docs.reduce<Record<string, Product[]>>(
     (acc, docSnapshot) => {
       const { title, items } = docSnapshot.data() as ProductCollection;
-      acc[title.toLowerCase()] = items;
+      if (title && typeof title === "string" && items) {
+        acc[title.toLowerCase()] = items;
+      }
       return acc;
     },
     {},
