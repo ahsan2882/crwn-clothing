@@ -23,8 +23,13 @@ export const CategoriesProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const getCategoriesMap = async () => {
-      const categoryMap = await getCategoriesAndDocuments("categories");
-      setCategoriesMap(categoryMap);
+      try {
+        const categoryMap = await getCategoriesAndDocuments("categories");
+        setCategoriesMap(categoryMap);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     };
 
     getCategoriesMap();

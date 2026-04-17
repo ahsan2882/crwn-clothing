@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useMemo } from "react";
 import { useParams } from "react-router";
 
 import ProductCard from "../../components/product-card/product-card.component";
@@ -11,15 +11,11 @@ import { Product } from "../../models/product.model";
 export default function Category() {
   const { category } = useParams();
   const { categoriesMap } = useContext(CategoriesContext);
-  const [products, setProducts] = useState<Product[]>(
-    category ? categoriesMap[category] : [],
-  );
 
-  useEffect(() => {
-    if (category) {
-      setProducts(categoriesMap[category]);
-    }
-  }, [category, categoriesMap]);
+  const products: Product[] = useMemo(
+    () => (category ? (categoriesMap[category] ?? []) : []),
+    [category, categoriesMap],
+  );
 
   return (
     <>
