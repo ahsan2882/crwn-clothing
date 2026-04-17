@@ -1,7 +1,7 @@
 import { Category } from "../../models/category.model";
 import "./category-item.styles.scss";
 
-function CategoryItem({ category }: { category: Category }) {
+export default function CategoryItem({ category }: { category: Category }) {
   const { imageUrl, title } = category;
   return (
     <div className="category-container">
@@ -16,5 +16,3 @@ function CategoryItem({ category }: { category: Category }) {
     </div>
   );
 }
-
-export default CategoryItem;
