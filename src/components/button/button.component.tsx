@@ -10,7 +10,7 @@ interface ButtonProps {
   children: ReactNode;
   type: "button" | "submit" | "reset";
   buttonStyle?: keyof typeof BUTTON_TYPE_CLASSES;
-  onClickHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickHandler?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function Button({

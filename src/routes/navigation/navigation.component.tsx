@@ -4,9 +4,14 @@ import { ReactComponent as Logo } from "../../assets/crown.svg";
 import "./navigation.styles.scss";
 import { UserContext } from "../../contexts/user.context";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
+import CartIcon from "../../components/cart-icon/cart-icon.component";
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
+import { CartContext } from "../../contexts/cart.context";
+import Button from "../../components/button/button.component";
 
 export default function Navigation() {
   const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
 
   const signOutHandler = async () => {
     try {
@@ -27,15 +32,21 @@ export default function Navigation() {
             SHOP
           </Link>
           {currentUser ? (
-            <button type="button" className="nav-link" onClick={signOutHandler}>
+            <Button
+              type="button"
+              buttonStyle="inverted"
+              onClickHandler={signOutHandler}
+            >
               SIGN OUT
-            </button>
+            </Button>
           ) : (
             <Link className="nav-link" to="/auth">
               SIGN IN
             </Link>
           )}
+          <CartIcon />
         </div>
+        {isCartOpen && <CartDropdown />}
       </div>
       <Outlet />
     </>
