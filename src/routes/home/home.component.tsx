@@ -32,8 +32,8 @@ export default function Home() {
   ];
 
   return (
-    <div>
+    <>
       <Directory categories={categories} />
-    </div>
+    </>
   );
 }
