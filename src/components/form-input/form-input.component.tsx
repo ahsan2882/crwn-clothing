@@ -1,4 +1,5 @@
-import "./form-input.styles.scss";
+import { FormInputField, FormInputLabel, Group } from "./form-input.styles";
+
 interface FormInputProps {
   label: string;
   inputOptions: {
@@ -13,9 +14,8 @@ export default function FormInput({ label, inputOptions }: FormInputProps) {
   const { inputName, value, inputType, onChangeHandler } = inputOptions;
 
   return (
-    <div className="group">
-      <input
-        className="form-input"
+    <Group>
+      <FormInputField
         id={inputName}
         required
         type={inputType}
@@ -24,13 +24,10 @@ export default function FormInput({ label, inputOptions }: FormInputProps) {
         value={value}
       />
       {label && (
-        <label
-          htmlFor={inputName}
-          className={`${value ? "shrink" : ""} form-input-label`}
-        >
+        <FormInputLabel $shrink={!!value} htmlFor={inputName}>
           {label}
-        </label>
+        </FormInputLabel>
       )}
-    </div>
+    </Group>
   );
 }
