@@ -15,7 +15,7 @@ import {
   onAuthStateChangedListener,
 } from "../utils/firebase/firebase.utils";
 
-interface UserContextType {
+export interface UserContextType {
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
 }
@@ -37,7 +37,7 @@ export const USER_ACTION_TYPES = {
   SET_CURRENT_USER: "SET_CURRENT_USER",
 } as const;
 
-const INITIAL_STATE = { currentUser: null };
+const INITIAL_STATE: UserState = { currentUser: null };
 
 const userReducer = (state: UserState, action: UserAction): UserState => {
   const { type, payload } = action;
