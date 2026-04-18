@@ -1,6 +1,6 @@
 import { ChangeEvent, useState, SubmitEvent, useContext } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
-import "./sign-up-form.styles.scss";
+import { SignUpContainer } from "./sign-up-form.styles";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -63,7 +63,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="sign-up-container">
+    <SignUpContainer>
       <h2>Don't have an account?</h2>
       <span>Sign up with email and password</span>
       <form onSubmit={onSubmitHandler}>
@@ -105,6 +105,6 @@ export default function SignUpForm() {
         />
         <Button type="submit">Sign Up</Button>
       </form>
-    </div>
+    </SignUpContainer>
   );
 }

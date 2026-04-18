@@ -1,6 +1,15 @@
 import { CartContext } from "../../contexts/cart.context";
 import { CartItemType } from "../../models/product.model";
-import "./checkout-item.styles.scss";
+import {
+  CheckoutItemContainer,
+  ImageContainer,
+  Img,
+  ItemInfo,
+  Quantity,
+  QuantityArrow,
+  QuantityValue,
+  RemoveButton,
+} from "./checkout-item.styles";
 import { useContext } from "react";
 
 type CheckoutItemProps = {
@@ -17,24 +26,24 @@ export default function CheckoutItem({ cartItem }: CheckoutItemProps) {
   const addItemHandler = () => addItemToCart(cartItem);
   const removeItemHandler = () => removeItemFromCart(cartItem);
   return (
-    <div className="checkout-item-container">
-      <div className="image-container">
-        <img src={imageUrl} alt={`${name}`} />
-      </div>
-      <span className="name"> {name} </span>
-      <span className="quantity">
-        <div role="button" className="arrow" onClick={removeItemHandler}>
+    <CheckoutItemContainer>
+      <ImageContainer>
+        <Img src={imageUrl} alt={`${name}`} />
+      </ImageContainer>
+      <ItemInfo> {name} </ItemInfo>
+      <Quantity>
+        <QuantityArrow role="button" onClick={removeItemHandler}>
           &#10094;
-        </div>
-        <span className="value">{quantity}</span>
-        <div role="button" className="arrow" onClick={addItemHandler}>
+        </QuantityArrow>
+        <QuantityValue>{quantity}</QuantityValue>
+        <QuantityArrow role="button" onClick={addItemHandler}>
           &#10095;
-        </div>
-      </span>
-      <span className="price"> {price}</span>
-      <div role="button" className="remove-button" onClick={clearItemHandler}>
+        </QuantityArrow>
+      </Quantity>
+      <ItemInfo> {price}</ItemInfo>
+      <RemoveButton role="button" onClick={clearItemHandler}>
         &#10005;
-      </div>
-    </div>
+      </RemoveButton>
+    </CheckoutItemContainer>
   );
 }
