@@ -5,7 +5,7 @@ import {
   Body,
   DirectoryItemContainer,
 } from "./directory-item.styles";
-import { KeyboardEvent } from "react";
+import { type KeyboardEvent } from "react";
 
 export default function DirectoryItem({
   category,

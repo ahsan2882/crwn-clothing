@@ -19,7 +19,7 @@ export const Img = styled.img`
 `;
 
 export const RemoveButton = styled.button.attrs({ type: "button" })`
-  padding-left: 12px;
+  padding: 0 0 0 12px;
   cursor: pointer;
   background: none;
   border: none;
