@@ -44,7 +44,8 @@ export const FormInputField = styled.input`
   margin: 25px 0;
 
   &:focus {
-    outline: none;
+    outline: 2px solid ${mainColor};
+    outline-offset: 2px;
   }
   &:focus ~ ${FormInputLabel} {
     ${shrinkLabel}

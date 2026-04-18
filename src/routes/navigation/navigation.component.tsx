@@ -32,7 +32,7 @@ export default function Navigation() {
     <>
       <NavigationContainer>
         <LogoContainer to="/">
-          <Logo className="logo" />
+          <Logo />
         </LogoContainer>
         <NavLinks>
           <NavLink to="/shop">SHOP</NavLink>
