@@ -17,20 +17,22 @@ export const ProductCardContainer = styled.div`
 
   button {
     width: 80%;
-    opacity: 0.7;
     position: absolute;
     top: 255px;
-    display: none;
+    opacity: 0;
+    display: flex;
+    pointer-events: none;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     img {
       opacity: 0.8;
     }
 
     button {
       opacity: 0.85;
-      display: flex;
+      pointer-events: auto;
     }
   }
 `;
