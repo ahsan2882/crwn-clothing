@@ -33,14 +33,27 @@ const defaultCartContext: CartContextType = {
 };
 
 type CartAction =
-  | { type: "SET_IS_CART_OPEN"; payload: boolean }
-  | { type: "SET_CART_ITEMS"; payload: CartItemType[] };
+  | { type: typeof CART_ACTION_TYPES.SET_IS_CART_OPEN; payload: boolean }
+  | {
+      type: typeof CART_ACTION_TYPES.ADD_ITEM_TO_CART;
+      payload: Product | CartItemType;
+    }
+  | {
+      type: typeof CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART;
+      payload: CartItemType;
+    }
+  | {
+      type: typeof CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART;
+      payload: CartItemType;
+    };
 
 type CartState = Pick<CartContextType, "isCartOpen" | "cartItems">;
 
 export const CART_ACTION_TYPES = {
   SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
-  SET_CART_ITEMS: "SET_CART_ITEMS",
+  ADD_ITEM_TO_CART: "ADD_ITEM_TO_CART",
+  REMOVE_ITEM_FROM_CART: "REMOVE_ITEM_FROM_CART",
+  CLEAR_ITEM_FROM_CART: "CLEAR_ITEM_FROM_CART",
 } as const;
 
 const INITIAL_STATE: CartState = {
@@ -50,13 +63,17 @@ const INITIAL_STATE: CartState = {
 
 export const CartContext = createContext<CartContextType>(defaultCartContext);
 
-const cartReducer = (state: CartState, action: CartAction) => {
+const cartReducer = (state: CartState, action: CartAction): CartState => {
   const { type, payload } = action;
   switch (type) {
     case CART_ACTION_TYPES.SET_IS_CART_OPEN:
       return { ...state, isCartOpen: payload };
-    case CART_ACTION_TYPES.SET_CART_ITEMS:
-      return { ...state, cartItems: payload };
+    case CART_ACTION_TYPES.ADD_ITEM_TO_CART:
+      return { ...state, cartItems: addToCart(state.cartItems, payload) };
+    case CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART:
+      return { ...state, cartItems: removeCartItem(state.cartItems, payload) };
+    case CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART:
+      return { ...state, cartItems: clearCartItem(state.cartItems, payload) };
     default:
       throw new Error(`Unhandled type ${type} in cartReducer`);
   }
@@ -82,19 +99,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const setIsCartOpen = (cartOpened: boolean) => {
     dispatch({ type: CART_ACTION_TYPES.SET_IS_CART_OPEN, payload: cartOpened });
   };
-  const setCartItems = (newCartItems: CartItemType[]) => {
-    dispatch({ type: CART_ACTION_TYPES.SET_CART_ITEMS, payload: newCartItems });
-  };
-  const addItemToCart = (productToAdd: Product) => {
-    const newCartItems = addToCart(cartItems, productToAdd);
-    setCartItems(newCartItems);
+  const addItemToCart = (productToAdd: Product | CartItemType) => {
+    dispatch({
+      type: CART_ACTION_TYPES.ADD_ITEM_TO_CART,
+      payload: productToAdd,
+    });
   };
   const removeItemFromCart = (cartItem: CartItemType): void => {
-    const updatedCartItems = removeCartItem(cartItems, cartItem);
-    setCartItems(updatedCartItems);
+    dispatch({
+      type: CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART,
+      payload: cartItem,
+    });
   };
   const clearItemFromCart = (cartItem: CartItemType) => {
-    setCartItems(clearCartItem(cartItems, cartItem));
+    dispatch({
+      type: CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART,
+      payload: cartItem,
+    });
   };
   const value = useMemo(
     () => ({

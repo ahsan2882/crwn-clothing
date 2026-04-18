@@ -7,7 +7,9 @@ export default function CartIcon() {
   return (
     <CartIconContainer
       type="button"
-      aria-label={`Open cart, ${cartCount} items`}
+      aria-label={`${isCartOpen ? "Close" : "Open"} cart, ${cartCount} ${
+        cartCount === 1 ? "item" : "items"
+      }`}
       onClick={() => setIsCartOpen(!isCartOpen)}
     >
       <ShopLogo />

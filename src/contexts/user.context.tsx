@@ -2,6 +2,8 @@ import {
   createContext,
   // useState,
   useEffect,
+  useMemo,
+  useCallback,
   type ReactNode,
   // type Dispatch,
   // type SetStateAction,
@@ -52,10 +54,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(userReducer, INITIAL_STATE);
   // const [currentUser, setCurrentUser] = useState<User | null>(null);
   const { currentUser } = state;
-  const setCurrentUser = (user: User | null) => {
+  const setCurrentUser = useCallback((user: User | null) => {
     dispatch({ type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user });
-  };
-  const value = { currentUser, setCurrentUser };
+  }, []);
+  const value = useMemo(
+    () => ({ currentUser, setCurrentUser }),
+    [currentUser, setCurrentUser],
+  );
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user: User | null) => {
       if (user) {
@@ -66,6 +71,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setCurrentUser(user);
     });
     return unsubscribe;
-  }, []);
+  }, [setCurrentUser]);
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
