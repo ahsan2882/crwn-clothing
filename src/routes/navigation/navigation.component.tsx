@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router";
+import { Outlet } from "react-router";
 import { useContext } from "react";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import {
