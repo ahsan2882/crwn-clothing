@@ -1,13 +1,14 @@
 import { useState, SubmitEvent, ChangeEvent } from "react";
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
-import "./sign-in-form.styles.scss";
+import { ButtonsContainer } from "./sign-in-form.styles";
 import { FirebaseError } from "firebase/app";
 import { AuthFormFields } from "../../models/auth-form.model";
 import {
   signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/firebase.utils";
+import { FormContainerStyle } from "../shared/form.styles";
 
 const defaultFormFields: AuthFormFields = {
   email: "",
@@ -56,7 +57,7 @@ export default function SignInForm() {
     setFormFields({ ...formFields, [name]: value });
   };
   return (
-    <div className="sign-in-container">
+    <FormContainerStyle>
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={onSubmitHandler}>
@@ -78,17 +79,17 @@ export default function SignInForm() {
             inputType: "password",
           }}
         />
-        <div className="buttons-container">
+        <ButtonsContainer>
           <Button type="submit">Sign In</Button>
           <Button
             type="button"
-            buttonStyle="google"
+            buttonStyle={BUTTON_TYPE_CLASSES.google}
             onClickHandler={signInWithGoogle}
           >
             Google sign in
           </Button>
-        </div>
+        </ButtonsContainer>
       </form>
-    </div>
+    </FormContainerStyle>
   );
 }
