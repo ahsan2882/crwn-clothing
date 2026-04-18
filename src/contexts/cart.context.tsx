@@ -2,6 +2,7 @@ import {
   createContext,
   // Dispatch,
   ReactNode,
+  useCallback,
   // SetStateAction,
   // useEffect,
   useMemo,
@@ -23,7 +24,7 @@ interface CartContextType {
 
 const defaultCartContext: CartContextType = {
   isCartOpen: false,
-  setIsCartOpen: () => false,
+  setIsCartOpen: () => {},
   cartItems: [],
   addItemToCart: () => {},
   removeItemFromCart: () => {},
@@ -96,27 +97,27 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
     [cartItems],
   );
-  const setIsCartOpen = (cartOpened: boolean) => {
+  const setIsCartOpen = useCallback((cartOpened: boolean) => {
     dispatch({ type: CART_ACTION_TYPES.SET_IS_CART_OPEN, payload: cartOpened });
-  };
-  const addItemToCart = (productToAdd: Product | CartItemType) => {
+  }, []);
+  const addItemToCart = useCallback((productToAdd: Product | CartItemType) => {
     dispatch({
       type: CART_ACTION_TYPES.ADD_ITEM_TO_CART,
       payload: productToAdd,
     });
-  };
-  const removeItemFromCart = (cartItem: CartItemType): void => {
+  }, []);
+  const removeItemFromCart = useCallback((cartItem: CartItemType): void => {
     dispatch({
       type: CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART,
       payload: cartItem,
     });
-  };
-  const clearItemFromCart = (cartItem: CartItemType) => {
+  }, []);
+  const clearItemFromCart = useCallback((cartItem: CartItemType) => {
     dispatch({
       type: CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART,
       payload: cartItem,
     });
-  };
+  }, []);
   const value = useMemo(
     () => ({
       isCartOpen,
@@ -128,7 +129,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cartTotal,
       clearItemFromCart,
     }),
-    [isCartOpen, cartItems, cartCount, cartTotal],
+    [
+      isCartOpen,
+      cartItems,
+      cartCount,
+      cartTotal,
+      setIsCartOpen,
+      addItemToCart,
+      removeItemFromCart,
+      clearItemFromCart,
+    ],
   );
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
