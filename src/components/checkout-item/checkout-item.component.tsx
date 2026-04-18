@@ -32,16 +32,25 @@ export default function CheckoutItem({ cartItem }: CheckoutItemProps) {
       </ImageContainer>
       <ItemInfo> {name} </ItemInfo>
       <Quantity>
-        <QuantityArrow role="button" onClick={removeItemHandler}>
+        <QuantityArrow
+          onClick={removeItemHandler}
+          aria-label={`Decrease quantity of ${name}`}
+        >
           &#10094;
         </QuantityArrow>
         <QuantityValue>{quantity}</QuantityValue>
-        <QuantityArrow role="button" onClick={addItemHandler}>
+        <QuantityArrow
+          onClick={addItemHandler}
+          aria-label={`Increase quantity of ${name}`}
+        >
           &#10095;
         </QuantityArrow>
       </Quantity>
       <ItemInfo> {price}</ItemInfo>
-      <RemoveButton role="button" onClick={clearItemHandler}>
+      <RemoveButton
+        onClick={clearItemHandler}
+        aria-label={`Remove ${name} from cart`}
+      >
         &#10005;
       </RemoveButton>
     </CheckoutItemContainer>

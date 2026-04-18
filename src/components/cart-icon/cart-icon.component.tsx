@@ -10,7 +10,7 @@ export default function CartIcon() {
       aria-label={`Open cart, ${cartCount} items`}
       onClick={() => setIsCartOpen((state) => !state)}
     >
-      <ShopLogo className="shopping-icon" />
+      <ShopLogo />
       <ItemCount>{cartCount}</ItemCount>
     </CartIconContainer>
   );

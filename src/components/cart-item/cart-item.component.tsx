@@ -17,7 +17,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
       <Img src={imageUrl} alt={`${name}`} />
       <ItemDetails>
         <ItemName>{name}</ItemName>
-        <span className="price">
+        <span>
           {quantity} x ${price}
         </span>
       </ItemDetails>

@@ -11,19 +11,23 @@ export const BUTTON_TYPE_CLASSES = {
   inverted: "inverted",
 };
 
+type ButtonType =
+  (typeof BUTTON_TYPE_CLASSES)[keyof typeof BUTTON_TYPE_CLASSES];
+
 interface ButtonProps {
   children: ReactNode;
   type: "button" | "submit" | "reset";
-  buttonStyle?: string;
+  buttonStyle?: ButtonType;
   onClickHandler?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const getButton = (buttonType = BUTTON_TYPE_CLASSES.base) => {
-  return {
+  const buttonMap = {
     [BUTTON_TYPE_CLASSES.base]: BaseButton,
     [BUTTON_TYPE_CLASSES.google]: GoogleSignInButton,
     [BUTTON_TYPE_CLASSES.inverted]: InvertedButton,
-  }[buttonType];
+  };
+  return buttonMap[buttonType] ?? BaseButton;
 };
 
 export default function Button({

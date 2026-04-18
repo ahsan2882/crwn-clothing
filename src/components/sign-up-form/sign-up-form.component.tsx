@@ -1,6 +1,5 @@
 import { ChangeEvent, useState, SubmitEvent, useContext } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
-import { SignUpContainer } from "./sign-up-form.styles";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -9,6 +8,7 @@ import { FirebaseError } from "firebase/app";
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
 import { UserContext } from "../../contexts/user.context";
+import { FormContainerStyle } from "../shared/form.styles";
 
 const defaultFormFields: AuthFormFields = {
   fullName: "",
@@ -63,7 +63,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <SignUpContainer>
+    <FormContainerStyle>
       <h2>Don't have an account?</h2>
       <span>Sign up with email and password</span>
       <form onSubmit={onSubmitHandler}>
@@ -105,6 +105,6 @@ export default function SignUpForm() {
         />
         <Button type="submit">Sign Up</Button>
       </form>
-    </SignUpContainer>
+    </FormContainerStyle>
   );
 }

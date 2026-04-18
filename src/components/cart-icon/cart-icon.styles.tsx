@@ -9,6 +9,9 @@ export const CartIconContainer = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 0;
+  border: none;
+  background: transparent;
 `;
 
 export const ShopLogo = styled(ShoppingIcon)`

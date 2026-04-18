@@ -5,6 +5,7 @@ import {
   Body,
   DirectoryItemContainer,
 } from "./directory-item.styles";
+import { KeyboardEvent } from "react";
 
 export default function DirectoryItem({
   category,
@@ -16,9 +17,20 @@ export default function DirectoryItem({
   const onNavigateHandler = () => {
     navigate(route);
   };
+  const onKeyHandler = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onNavigateHandler();
+    }
+  };
   return (
-    <DirectoryItemContainer role="button" onClick={onNavigateHandler}>
-      <BackgroundImage $imageurl={imageUrl} />
+    <DirectoryItemContainer
+      role="button"
+      tabIndex={0}
+      onClick={onNavigateHandler}
+      onKeyDown={onKeyHandler}
+    >
+      <BackgroundImage $imageUrl={imageUrl} />
       <Body>
         <h2>{title}</h2>
         <p>Shop now!</p>
