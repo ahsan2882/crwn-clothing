@@ -1,5 +1,5 @@
-import DirectoryItem from "../directory-item/directory-item.component";
 import { CategoryType } from "../../models/category.model";
+import DirectoryItem from "../directory-item/directory-item.component";
 import { DirectoryContainer } from "./directory.styles";
 
 const categories: CategoryType[] = [

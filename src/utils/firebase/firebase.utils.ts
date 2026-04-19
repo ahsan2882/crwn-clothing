@@ -1,27 +1,30 @@
 import { initializeApp } from "firebase/app";
 import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  signInWithRedirect,
-  signInWithPopup,
   GoogleAuthProvider,
   User,
   UserCredential,
-  signInWithEmailAndPassword,
-  signOut,
+  createUserWithEmailAndPassword,
+  getAuth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
 } from "firebase/auth";
 import {
-  getFirestore,
+  collection,
   doc,
   getDoc,
-  setDoc,
-  collection,
-  writeBatch,
-  query,
   getDocs,
+  getFirestore,
+  query,
+  setDoc,
+  writeBatch,
 } from "firebase/firestore";
-import { Product, ProductCollection } from "../../models/product.model";
+import {
+  // Product,
+  ProductCollection,
+} from "../../models/product.model";
 
 const getRequiredEnv = (key: string): string => {
   const value = process.env[key];
@@ -72,21 +75,25 @@ export const addCollectionAndDocuments = async (
 
 export const getCategoriesAndDocuments = async (
   collectionKey: string,
-): Promise<Record<string, Product[]>> => {
+): Promise<ProductCollection[]> => {
+  // ): Promise<Record<string, Product[]>> => {
   const collectionRef = collection(db, collectionKey);
   const queryRef = query(collectionRef);
   const querySnapshot = await getDocs(queryRef);
-  const categoryMap = querySnapshot.docs.reduce<Record<string, Product[]>>(
-    (acc, docSnapshot) => {
-      const { title, items } = docSnapshot.data() as ProductCollection;
-      if (title && typeof title === "string" && items) {
-        acc[title.toLowerCase()] = items;
-      }
-      return acc;
-    },
-    {},
+  return querySnapshot.docs.map(
+    (docSnapshot) => docSnapshot.data() as ProductCollection,
   );
-  return categoryMap;
+  //   .reduce<Record<string, Product[]>>(
+  //   (acc, docSnapshot) => {
+  //     const { title, items } = docSnapshot.data() as ProductCollection;
+  //     if (title && typeof title === "string" && items) {
+  //       acc[title.toLowerCase()] = items;
+  //     }
+  //     return acc;
+  //   },
+  //   {},
+  // );
+  // return categoryMap;
 };
 
 export const createUserDocumentFromAuth = async (

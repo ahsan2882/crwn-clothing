@@ -1,3 +1,4 @@
+import { type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
 import { CategoryType } from "../../models/category.model";
 import {
@@ -5,7 +6,6 @@ import {
   Body,
   DirectoryItemContainer,
 } from "./directory-item.styles";
-import { type KeyboardEvent } from "react";
 
 export default function DirectoryItem({
   category,
@@ -13,6 +13,7 @@ export default function DirectoryItem({
   category: CategoryType;
 }) {
   const { imageUrl, title, route } = category;
+
   const navigate = useNavigate();
   const onNavigateHandler = () => {
     navigate(route);
