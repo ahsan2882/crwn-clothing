@@ -4,8 +4,8 @@ import {
   Preview,
 } from "./category-preview.styles";
 
-import ProductCard from "../product-card/product-card.component";
 import { Product } from "../../models/product.model";
+import ProductCard from "../product-card/product-card.component";
 
 type CategoryPreviewProps = {
   title: string;
