@@ -1,7 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartState } from "../../models/cart.model";
 import { CartItemType, Product } from "../../models/product.model";
-import { CART_ACTION_TYPES } from "./cart.types";
 
 const INITIAL_STATE: CartState = {
   isCartOpen: false,
@@ -12,61 +11,26 @@ export const cartReducer = createSlice({
   name: "cart",
   initialState: INITIAL_STATE,
   reducers: {
-    setIsCartOpen: (
-      state: CartState,
-      { payload }: { payload: { type: string; isCartOpen: boolean } },
-    ): CartState => {
-      const { type, isCartOpen } = payload;
-      switch (type) {
-        case CART_ACTION_TYPES.SET_IS_CART_OPEN:
-          return { ...state, isCartOpen };
-        default:
-          return state;
-      }
+    setIsCartOpen: (state: CartState, { payload }: PayloadAction<boolean>) => {
+      return { ...state, isCartOpen: payload };
     },
     addItemToCart: (
       state: CartState,
-      {
-        payload,
-      }: { payload: { type: string; cartItem: CartItemType | Product } },
-    ): CartState => {
-      const { type, cartItem } = payload;
-      switch (type) {
-        case CART_ACTION_TYPES.ADD_ITEM_TO_CART:
-          return { ...state, cartItems: addToCart(state.cartItems, cartItem) };
-        default:
-          return state;
-      }
+      { payload }: PayloadAction<CartItemType | Product>,
+    ) => {
+      return { ...state, cartItems: addToCart(state.cartItems, payload) };
     },
     removeItemFromCart: (
       state: CartState,
-      { payload }: { payload: { type: string; cartItem: CartItemType } },
-    ): CartState => {
-      const { type, cartItem } = payload;
-      switch (type) {
-        case CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART:
-          return {
-            ...state,
-            cartItems: removeCartItem(state.cartItems, cartItem),
-          };
-        default:
-          return state;
-      }
+      { payload }: PayloadAction<CartItemType>,
+    ) => {
+      return { ...state, cartItems: removeCartItem(state.cartItems, payload) };
     },
     clearItemFromCart: (
       state: CartState,
-      { payload }: { payload: { type: string; cartItem: CartItemType } },
-    ): CartState => {
-      const { type, cartItem } = payload;
-      switch (type) {
-        case CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART:
-          return {
-            ...state,
-            cartItems: clearCartItem(state.cartItems, cartItem),
-          };
-        default:
-          return state;
-      }
+      { payload }: PayloadAction<CartItemType>,
+    ) => {
+      return { ...state, cartItems: clearCartItem(state.cartItems, payload) };
     },
   },
 });

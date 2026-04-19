@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { setIsCartOpen } from "../../store/cart/cart.reducer";
 import { selectCartItems } from "../../store/cart/cart.selector";
-import { CART_ACTION_TYPES } from "../../store/cart/cart.types";
 import CartItem from "../cart-item/cart-item.component";
 
 export default function CartDropdown() {
@@ -20,12 +19,7 @@ export default function CartDropdown() {
   const navigate = useNavigate();
   const goToCheckoutHandler = () => {
     navigate("/checkout");
-    dispatch(
-      setIsCartOpen({
-        type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
-        isCartOpen: false,
-      }),
-    );
+    dispatch(setIsCartOpen(false));
   };
   return (
     <CartDropdownContainer>

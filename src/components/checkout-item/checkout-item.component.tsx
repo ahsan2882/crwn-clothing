@@ -17,7 +17,6 @@ import {
   clearItemFromCart,
   removeItemFromCart,
 } from "../../store/cart/cart.reducer";
-import { CART_ACTION_TYPES } from "../../store/cart/cart.types";
 
 type CheckoutItemProps = {
   cartItem: CartItemType;
@@ -29,24 +28,9 @@ export default function CheckoutItem({ cartItem }: CheckoutItemProps) {
   // const { clearItemFromCart, addItemToCart, removeItemFromCart } =
   //   useContext(CartContext);
   const dispatch = useDispatch();
-  const clearItemHandler = () =>
-    dispatch(
-      clearItemFromCart({
-        type: CART_ACTION_TYPES.CLEAR_ITEM_FROM_CART,
-        cartItem,
-      }),
-    );
-  const addItemHandler = () =>
-    dispatch(
-      addItemToCart({ type: CART_ACTION_TYPES.ADD_ITEM_TO_CART, cartItem }),
-    );
-  const removeItemHandler = () =>
-    dispatch(
-      removeItemFromCart({
-        type: CART_ACTION_TYPES.REMOVE_ITEM_FROM_CART,
-        cartItem,
-      }),
-    );
+  const clearItemHandler = () => dispatch(clearItemFromCart(cartItem));
+  const addItemHandler = () => dispatch(addItemToCart(cartItem));
+  const removeItemHandler = () => dispatch(removeItemFromCart(cartItem));
   return (
     <CheckoutItemContainer>
       <ImageContainer>

@@ -17,7 +17,6 @@ export default function Category() {
   const { category } = useParams();
   // const { categoriesMap } = useContext(CategoriesContext);
   const categoriesMap = useSelector(selectCategoriesMap);
-  console.log("render/re-rendering category");
 
   const products: Product[] = useMemo(
     () => (category ? (categoriesMap[category] ?? []) : []),

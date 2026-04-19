@@ -6,7 +6,6 @@ import {
   selectCartCount,
   selectIsCartOpen,
 } from "../../store/cart/cart.selector";
-import { CART_ACTION_TYPES } from "../../store/cart/cart.types";
 import { CartIconContainer, ItemCount, ShopLogo } from "./cart-icon.styles";
 
 export default function CartIcon() {
@@ -16,12 +15,7 @@ export default function CartIcon() {
 
   const dispatch = useDispatch();
   const onClickHandler = () => {
-    dispatch(
-      setIsCartOpen({
-        type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
-        isCartOpen: !isCartOpen,
-      }),
-    );
+    dispatch(setIsCartOpen(!isCartOpen));
   };
   return (
     <CartIconContainer
