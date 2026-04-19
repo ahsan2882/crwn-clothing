@@ -1,14 +1,14 @@
-import { useState, SubmitEvent, ChangeEvent } from "react";
-import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
-import FormInput from "../form-input/form-input.component";
-import { ButtonsContainer } from "./sign-in-form.styles";
 import { FirebaseError } from "firebase/app";
+import { ChangeEvent, SubmitEvent, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
 import {
-  signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
 } from "../../utils/firebase/firebase.utils";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
+import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
+import { ButtonsContainer } from "./sign-in-form.styles";
 
 const defaultFormFields: AuthFormFields = {
   email: "",

@@ -1,24 +1,30 @@
+// import { useContext } from "react";
 import { Outlet } from "react-router";
-import { useContext } from "react";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import {
-  NavigationContainer,
-  NavLinks,
-  NavLink,
   LogoContainer,
+  NavigationContainer,
+  NavLink,
+  NavLinks,
 } from "./navigation.styles";
-import { UserContext } from "../../contexts/user.context";
-import { signOutUser } from "../../utils/firebase/firebase.utils";
-import CartIcon from "../../components/cart-icon/cart-icon.component";
-import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
-import { CartContext } from "../../contexts/cart.context";
+// import { UserContext } from "../../contexts/user.context";
+import { useSelector } from "react-redux";
 import Button, {
   BUTTON_TYPE_CLASSES,
 } from "../../components/button/button.component";
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component";
+import CartIcon from "../../components/cart-icon/cart-icon.component";
+// import { CartContext } from "../../contexts/cart.context";
+import { selectIsCartOpen } from "../../store/cart/cart.selector";
+import { selectCurrentUser } from "../../store/user/user.selector";
+import { signOutUser } from "../../utils/firebase/firebase.utils";
 
 export default function Navigation() {
-  const { currentUser } = useContext(UserContext);
-  const { isCartOpen } = useContext(CartContext);
+  // using redux selector instead of context
+  // const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
+  // const { isCartOpen } = useContext(CartContext);
+  const isCartOpen = useSelector(selectIsCartOpen);
 
   const signOutHandler = async () => {
     try {

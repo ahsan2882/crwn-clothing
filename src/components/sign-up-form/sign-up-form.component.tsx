@@ -1,13 +1,16 @@
-import { ChangeEvent, useState, SubmitEvent, useContext } from "react";
+import { FirebaseError } from "firebase/app";
+import { ChangeEvent, SubmitEvent, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
-import { FirebaseError } from "firebase/app";
-import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-import { UserContext } from "../../contexts/user.context";
+import FormInput from "../form-input/form-input.component";
+// import { UserContext } from "../../contexts/user.context";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../../store/user/user.reducer";
+import { USER_ACTION_TYPES } from "../../store/user/user.types";
 import { FormContainerStyle } from "../shared/form.styles";
 
 const defaultFormFields: AuthFormFields = {
@@ -17,9 +20,10 @@ const defaultFormFields: AuthFormFields = {
   confirmPassword: "",
 };
 export default function SignUpForm() {
+  const dispatch = useDispatch();
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
-  const { setCurrentUser } = useContext(UserContext);
+  // const { setCurrentUser } = useContext(UserContext);
 
   const { fullName, email, password, confirmPassword } = formFields;
 
@@ -39,7 +43,13 @@ export default function SignUpForm() {
 
         await createUserDocumentFromAuth(user, { displayName: fullName });
         resetFormFields();
-        setCurrentUser(user);
+        // setCurrentUser(user);
+        dispatch(
+          setCurrentUser({
+            type: USER_ACTION_TYPES.SET_CURRENT_USER,
+            user,
+          }),
+        );
       }
     } catch (error) {
       if (

@@ -11,6 +11,7 @@ import { AuthenticationContainer } from "./authentication.styles";
 // import { getRedirectResult } from "firebase/auth";
 
 export default function Authentication() {
+  // trying out google redirect
   // useEffect(() => {
   //   const checkRedirectResult = async () => {
   //     const response = await getRedirectResult(auth);
