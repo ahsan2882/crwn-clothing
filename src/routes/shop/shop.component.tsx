@@ -1,26 +1,30 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router";
-import { setCategories } from "../../store/categories/category.reducer";
-import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
+import {
+  selectCategoriesError,
+  selectCategoriesHasLoaded,
+  selectCategoriesIsLoading,
+} from "../../store/categories/category.selector";
+import { fetchCategoriesAsync } from "../../store/categories/category.thunk";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CategoriesPreview from "../categories-preview/categories-preview.component";
 import Category from "../category/category.component";
+import Spinner from "../../components/spinner/spinner.component";
 
 export default function Shop() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(selectCategoriesIsLoading);
+  const hasLoaded = useAppSelector(selectCategoriesHasLoaded);
+  const error = useAppSelector(selectCategoriesError);
   useEffect(() => {
-    const getCategoriesMap = async () => {
-      try {
-        const categories = await getCategoriesAndDocuments("categories");
-        dispatch(setCategories(categories));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getCategoriesMap();
-  }, [dispatch]);
-  return (
+    if (!hasLoaded) {
+      dispatch(fetchCategoriesAsync());
+    }
+  }, [dispatch, hasLoaded]);
+  if (error) return <p>Error: {error}</p>;
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <Routes>
       <Route index element={<CategoriesPreview />} />
       <Route path=":category" element={<Category />} />
