@@ -17,7 +17,9 @@ export default function Shop() {
   const hasLoaded = useAppSelector(selectCategoriesHasLoaded);
   const error = useAppSelector(selectCategoriesError);
   useEffect(() => {
-    dispatch(fetchCategoriesAsync());
+    if (!hasLoaded) {
+      dispatch(fetchCategoriesAsync());
+    }
   }, [dispatch, hasLoaded]);
   if (error) return <p>Error: {error}</p>;
   return isLoading ? (
