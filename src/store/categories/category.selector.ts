@@ -10,8 +10,8 @@ export const selectCategories = createSelector([categoryState], (category) => {
 
 export const selectCategoriesMap = createSelector(
   [selectCategories],
-  (categories) =>
-    categories.reduce<Record<string, Product[]>>((acc, category) => {
+  (categories) => {
+    return categories.reduce<Record<string, Product[]>>((acc, category) => {
       const { title, items } = category;
 
       if (title && typeof title === "string" && items) {
@@ -19,5 +19,16 @@ export const selectCategoriesMap = createSelector(
       }
 
       return acc;
-    }, {}),
+    }, {});
+  },
+);
+
+export const selectCategoriesIsLoading = createSelector(
+  [categoryState],
+  (category) => category.isLoading,
+);
+
+export const selectCategoriesError = createSelector(
+  [categoryState],
+  (category) => category.error,
 );
