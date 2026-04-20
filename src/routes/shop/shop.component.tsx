@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router";
 import {
   selectCategoriesError,
+  selectCategoriesHasLoaded,
   selectCategoriesIsLoading,
 } from "../../store/categories/category.selector";
 import { fetchCategoriesAsync } from "../../store/categories/category.thunk";
@@ -13,11 +14,12 @@ import Spinner from "../../components/spinner/spinner.component";
 export default function Shop() {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectCategoriesIsLoading);
+  const hasLoaded = useAppSelector(selectCategoriesHasLoaded);
   const error = useAppSelector(selectCategoriesError);
   useEffect(() => {
     dispatch(fetchCategoriesAsync());
-  }, [dispatch]);
-  if (error) return <p>Error: {error.message}</p>;
+  }, [dispatch, hasLoaded]);
+  if (error) return <p>Error: {error}</p>;
   return isLoading ? (
     <Spinner />
   ) : (

@@ -6,6 +6,7 @@ const INITIAL_STATE: CategoryState = {
   categories: [],
   isLoading: false,
   error: null,
+  hasLoaded: false,
 };
 
 export const categoryReducer = createSlice({
@@ -20,11 +21,13 @@ export const categoryReducer = createSlice({
       })
       .addCase(fetchCategoriesAsync.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.hasLoaded = true;
         state.categories = payload;
       })
       .addCase(fetchCategoriesAsync.rejected, (state, { error }) => {
         state.isLoading = false;
-        state.error = Error(error.message);
+        state.hasLoaded = false;
+        state.error = error.message ?? "Failed to fetch categories";
       });
   },
 });

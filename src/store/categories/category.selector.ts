@@ -28,6 +28,11 @@ export const selectCategoriesIsLoading = createSelector(
   (category) => category.isLoading,
 );
 
+export const selectCategoriesHasLoaded = createSelector(
+  [categoryState],
+  (category) => category.hasLoaded,
+);
+
 export const selectCategoriesError = createSelector(
   [categoryState],
   (category) => category.error,

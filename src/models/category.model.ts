@@ -10,5 +10,7 @@ export interface CategoryType {
 export interface CategoryState {
   categories: ProductCollection[];
   isLoading: boolean;
-  error?: Error | null;
+
+  hasLoaded: boolean;
+  error?: string | null;
 }
