@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { setIsCartOpen } from "../../store/cart/cart.reducer";
+import { setIsCartOpen } from "../../store/cart/cart.actions";
 import { selectCartItems } from "../../store/cart/cart.selector";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Button from "../button/button.component";
