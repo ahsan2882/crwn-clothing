@@ -1,19 +1,21 @@
 import { initializeApp } from "firebase/app";
 import {
-  GoogleAuthProvider,
-  User,
-  UserCredential,
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
   signOut,
+  User,
+  UserCredential,
 } from "firebase/auth";
 import {
   collection,
   doc,
+  DocumentData,
+  DocumentSnapshot,
   getDoc,
   getDocs,
   getFirestore,
@@ -21,10 +23,7 @@ import {
   setDoc,
   writeBatch,
 } from "firebase/firestore";
-import {
-  // Product,
-  ProductCollection,
-} from "../../models/product.model";
+import { ProductCollection } from "../../models/product.model";
 
 const getRequiredEnv = (key: string): string => {
   const value = process.env[key];
@@ -76,70 +75,59 @@ export const addCollectionAndDocuments = async (
 export const getCategoriesAndDocuments = async (
   collectionKey: string,
 ): Promise<ProductCollection[]> => {
-  // ): Promise<Record<string, Product[]>> => {
   const collectionRef = collection(db, collectionKey);
   const queryRef = query(collectionRef);
   const querySnapshot = await getDocs(queryRef);
   return querySnapshot.docs.map(
     (docSnapshot) => docSnapshot.data() as ProductCollection,
   );
-  //   .reduce<Record<string, Product[]>>(
-  //   (acc, docSnapshot) => {
-  //     const { title, items } = docSnapshot.data() as ProductCollection;
-  //     if (title && typeof title === "string" && items) {
-  //       acc[title.toLowerCase()] = items;
-  //     }
-  //     return acc;
-  //   },
-  //   {},
-  // );
-  // return categoryMap;
 };
 
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation: Record<string, any> = {},
-) => {
-  if (!userAuth) return;
-  const userDocRef = doc(db, "users", userAuth.uid);
-  const userSnapshot = await getDoc(userDocRef);
-  if (!userSnapshot.exists()) {
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
-    try {
-      await setDoc(userDocRef, {
-        displayName,
-        email,
-        createdAt,
-        ...additionalInformation,
-      });
-    } catch (error) {
-      console.error("error creating the user", error);
-      throw error;
+): Promise<DocumentSnapshot<DocumentData, DocumentData>> => {
+  if (userAuth) {
+    const userDocRef = doc(db, "users", userAuth.uid);
+    let userSnapshot = await getDoc(userDocRef);
+    if (!userSnapshot.exists()) {
+      const { displayName, email } = userAuth;
+      const createdAt = new Date();
+      try {
+        await setDoc(userDocRef, {
+          displayName,
+          email,
+          createdAt,
+          ...additionalInformation,
+        });
+        userSnapshot = await getDoc(userDocRef);
+      } catch (error) {
+        console.error("error creating the user", error);
+        throw error;
+      }
     }
+    return userSnapshot;
   }
-  return userDocRef;
+  return Promise.reject(new Error("Missing authenticated user"));
 };
 
 export const createAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
-) => Promise<UserCredential | undefined> = async (
-  email: string,
-  password: string,
-) => {
-  if (!email || !password) return;
+) => Promise<UserCredential> = async (email: string, password: string) => {
+  if (!email || !password) {
+    return Promise.reject(new Error("Email and password are required"));
+  }
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const signInAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
-) => Promise<UserCredential | undefined> = async (
-  email: string,
-  password: string,
-) => {
-  if (!email || !password) return;
+) => Promise<UserCredential> = async (email: string, password: string) => {
+  if (!email || !password) {
+    return Promise.reject(new Error("Email and password are required"));
+  }
   return await signInWithEmailAndPassword(auth, email, password);
 };
 
@@ -148,3 +136,19 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = (
   callback: (user: User | null) => void,
 ) => onAuthStateChanged(auth, callback);
+
+export const getCurrentUser = (): Promise<User | null> => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      (error) => {
+        unsubscribe();
+        reject(error);
+      },
+    );
+  });
+};

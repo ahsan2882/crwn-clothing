@@ -1,13 +1,9 @@
-import {
-  // useContext,
-  useMemo,
-} from "react";
+import { useMemo } from "react";
 import { useParams } from "react-router";
 
 import ProductCard from "../../components/product-card/product-card.component";
 
-// import { CategoriesContext } from "../../contexts/categories.context";
-
+import Spinner from "../../components/spinner/spinner.component";
 import { Product } from "../../models/product.model";
 import {
   selectCategoriesIsLoading,
@@ -15,11 +11,9 @@ import {
 } from "../../store/categories/category.selector";
 import { useAppSelector } from "../../store/hooks";
 import { CategoryContainer, CategoryTitle } from "./category.styles";
-import Spinner from "../../components/spinner/spinner.component";
 
 export default function Category() {
   const { category } = useParams();
-  // const { categoriesMap } = useContext(CategoriesContext);
   const categoriesMap = useAppSelector(selectCategoriesMap);
   const isLoading = useAppSelector(selectCategoriesIsLoading);
 
