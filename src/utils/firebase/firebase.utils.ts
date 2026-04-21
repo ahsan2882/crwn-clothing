@@ -1,15 +1,15 @@
 import { initializeApp } from "firebase/app";
 import {
-  GoogleAuthProvider,
-  User,
-  UserCredential,
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
   signOut,
+  User,
+  UserCredential,
 } from "firebase/auth";
 import {
   collection,
@@ -23,10 +23,7 @@ import {
   setDoc,
   writeBatch,
 } from "firebase/firestore";
-import {
-  // Product,
-  ProductCollection,
-} from "../../models/product.model";
+import { ProductCollection } from "../../models/product.model";
 
 const getRequiredEnv = (key: string): string => {
   const value = process.env[key];
@@ -78,24 +75,12 @@ export const addCollectionAndDocuments = async (
 export const getCategoriesAndDocuments = async (
   collectionKey: string,
 ): Promise<ProductCollection[]> => {
-  // ): Promise<Record<string, Product[]>> => {
   const collectionRef = collection(db, collectionKey);
   const queryRef = query(collectionRef);
   const querySnapshot = await getDocs(queryRef);
   return querySnapshot.docs.map(
     (docSnapshot) => docSnapshot.data() as ProductCollection,
   );
-  //   .reduce<Record<string, Product[]>>(
-  //   (acc, docSnapshot) => {
-  //     const { title, items } = docSnapshot.data() as ProductCollection;
-  //     if (title && typeof title === "string" && items) {
-  //       acc[title.toLowerCase()] = items;
-  //     }
-  //     return acc;
-  //   },
-  //   {},
-  // );
-  // return categoryMap;
 };
 
 export const createUserDocumentFromAuth = async (
@@ -160,7 +145,10 @@ export const getCurrentUser = (): Promise<User | null> => {
         unsubscribe();
         resolve(userAuth);
       },
-      reject,
+      (error) => {
+        unsubscribe();
+        reject(error);
+      },
     );
   });
 };

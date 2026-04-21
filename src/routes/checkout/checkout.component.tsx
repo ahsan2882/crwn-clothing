@@ -1,20 +1,17 @@
-// import { useContext } from "react";
-import {
-  CheckoutContainer,
-  CheckoutHeader,
-  HeaderBlock,
-  Total,
-} from "./checkout.styles";
-// import { CartContext } from "../../contexts/cart.context";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 import {
   selectCartItems,
   selectCartTotal,
 } from "../../store/cart/cart.selector";
 import { useAppSelector } from "../../store/hooks";
+import {
+  CheckoutContainer,
+  CheckoutHeader,
+  HeaderBlock,
+  Total,
+} from "./checkout.styles";
 
 export default function Checkout() {
-  // const { cartItems, cartTotal } = useContext(CartContext);
   const cartItems = useAppSelector(selectCartItems);
   const cartTotal = useAppSelector(selectCartTotal);
 

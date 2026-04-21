@@ -1,15 +1,14 @@
-import { all, call, put, takeLatest, take } from "redux-saga/effects";
+import { User, UserCredential } from "firebase/auth";
 import { eventChannel, EventChannel } from "redux-saga";
+import { all, call, put, take, takeLatest } from "redux-saga/effects";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
-  getCurrentUser,
   onAuthStateChangedListener,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
   signOutUser,
 } from "../../utils/firebase/firebase.utils";
-import { User, UserCredential } from "firebase/auth";
 import {
   checkUserSession,
   emailSignInStart,
@@ -112,7 +111,7 @@ export function* getSnapshotFromUserAuth(
 function createAuthChannel(): EventChannel<User | null> {
   return eventChannel<User | null>((emit) => {
     const unsubscribe = onAuthStateChangedListener(emit);
-    return unsubscribe; // called by redux-saga when channel is closed
+    return unsubscribe;
   });
 }
 

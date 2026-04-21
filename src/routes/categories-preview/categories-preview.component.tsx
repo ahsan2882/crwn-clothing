@@ -1,6 +1,3 @@
-// import { useContext } from "react";
-
-// import { CategoriesContext } from "../../contexts/categories.context";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
 import Spinner from "../../components/spinner/spinner.component";
 import {
@@ -10,7 +7,6 @@ import {
 import { useAppSelector } from "../../store/hooks";
 
 export default function CategoriesPreview() {
-  // const { categoriesMap } = useContext(CategoriesContext);
   const categoriesMap = useAppSelector(selectCategoriesMap);
   const isLoading = useAppSelector(selectCategoriesIsLoading);
   return (

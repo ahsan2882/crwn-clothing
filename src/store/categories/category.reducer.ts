@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { CategoryState } from "../../models/category.model";
 import {
+  fetchCategoriesFailure,
   fetchCategoriesStart,
   fetchCategoriesSuccess,
-  fetchCategoriesFailure,
 } from "./category.actions";
 
 const INITIAL_STATE: CategoryState = {

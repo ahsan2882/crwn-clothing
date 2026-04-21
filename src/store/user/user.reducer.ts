@@ -71,6 +71,7 @@ export const userReducer = createSlice({
       })
       .addCase(signOutStart, (state) => {
         state.isLoading = true;
+        state.hasLoaded = false;
         state.error = null;
       });
   },

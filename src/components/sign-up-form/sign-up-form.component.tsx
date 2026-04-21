@@ -1,19 +1,10 @@
-import { FirebaseError } from "firebase/app";
 import { ChangeEvent, SubmitEvent, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
-import Button from "../button/button.component";
-import FormInput from "../form-input/form-input.component";
-// import { UserContext } from "../../contexts/user.context";
-import { useDispatch } from "react-redux";
-// import { setCurrentUser } from "../../store/user/user.reducer";
-import { USER_ACTION_TYPES } from "../../store/user/user.types";
-import { FormContainerStyle } from "../shared/form.styles";
 import { useAppDispatch } from "../../store/hooks";
 import { signUpStart } from "../../store/user/user.actions";
+import Button from "../button/button.component";
+import FormInput from "../form-input/form-input.component";
+import { FormContainerStyle } from "../shared/form.styles";
 
 const defaultFormFields: AuthFormFields = {
   fullName: "",
@@ -25,50 +16,20 @@ export default function SignUpForm() {
   const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
-  // const { setCurrentUser } = useContext(UserContext);
 
   const { fullName, email, password, confirmPassword } = formFields;
 
-  const onSubmitHandler = async (event: SubmitEvent<HTMLFormElement>) => {
+  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!email || !password || !confirmPassword || !fullName) {
+      return;
+    }
     if (password !== confirmPassword) {
       alert("passwords do not match");
       return;
     }
-    try {
-      // const response = await createAuthUserWithEmailAndPassword(
-      //   email,
-      //   password,
-      // );
-      // if (response) {
-      //   const { user } = response;
-
-      //   await createUserDocumentFromAuth(user, { displayName: fullName });
-      //   resetFormFields();
-      // setCurrentUser(user);
-      // dispatch(
-      // setCurrentUser({
-      //   type: USER_ACTION_TYPES.SET_CURRENT_USER,
-      //   user,
-      // }),
-      // );
-      // }
-      if (!email || !password || !confirmPassword || !fullName) {
-        return;
-      }
-
-      dispatch(signUpStart({ email, password, displayName: fullName }));
-      resetFormFields();
-    } catch (error) {
-      if (
-        error instanceof FirebaseError &&
-        error.code === "auth/email-already-in-use"
-      ) {
-        alert("cannot create user, email already in use");
-      } else {
-        console.log("user creation encountered an error", error);
-      }
-    }
+    dispatch(signUpStart({ email, password, displayName: fullName }));
+    resetFormFields();
   };
 
   const resetFormFields = () => {

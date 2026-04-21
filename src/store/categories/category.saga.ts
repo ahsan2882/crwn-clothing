@@ -1,10 +1,10 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
 import { ProductCollection } from "../../models/product.model";
+import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
 import {
+  fetchCategoriesFailure,
   fetchCategoriesStart,
   fetchCategoriesSuccess,
-  fetchCategoriesFailure,
 } from "./category.actions";
 
 function* fetchCategories() {

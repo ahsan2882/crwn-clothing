@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router";
+import Spinner from "../../components/spinner/spinner.component";
+import { fetchCategoriesStart } from "../../store/categories/category.actions";
 import {
   selectCategoriesError,
   selectCategoriesHasLoaded,
@@ -8,8 +10,6 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CategoriesPreview from "../categories-preview/categories-preview.component";
 import Category from "../category/category.component";
-import Spinner from "../../components/spinner/spinner.component";
-import { fetchCategoriesStart } from "../../store/categories/category.actions";
 
 export default function Shop() {
   const dispatch = useAppDispatch();

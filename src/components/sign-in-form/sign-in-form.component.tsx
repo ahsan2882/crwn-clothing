@@ -1,19 +1,14 @@
-import { FirebaseError } from "firebase/app";
 import { ChangeEvent, SubmitEvent, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
-import {
-  signInAuthUserWithEmailAndPassword,
-  signInWithGooglePopup,
-} from "../../utils/firebase/firebase.utils";
-import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
-import FormInput from "../form-input/form-input.component";
-import { FormContainerStyle } from "../shared/form.styles";
-import { ButtonsContainer } from "./sign-in-form.styles";
 import { useAppDispatch } from "../../store/hooks";
 import {
   emailSignInStart,
   googleSignInStart,
 } from "../../store/user/user.actions";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
+import FormInput from "../form-input/form-input.component";
+import { FormContainerStyle } from "../shared/form.styles";
+import { ButtonsContainer } from "./sign-in-form.styles";
 
 const defaultFormFields: AuthFormFields = {
   email: "",
@@ -28,16 +23,12 @@ export default function SignInForm() {
   const { email, password } = formFields;
 
   const signInWithGoogle = async () => {
-    // try {
-    //   await signInWithGooglePopup();
-    // } catch (error) {
-    //   console.error("Google sign-in failed", error);
-    // }
     dispatch(googleSignInStart());
   };
 
   const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!email || !password) return;
     dispatch(emailSignInStart({ email, password }));
     resetFormFields();
   };
