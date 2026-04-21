@@ -21,7 +21,7 @@ export default function Navigation() {
   const currentUser = useAppSelector(selectCurrentUser);
   const isCartOpen = useAppSelector(selectIsCartOpen);
 
-  const signOutHandler = async () => {
+  const signOutHandler = () => {
     dispatch(signOutStart());
   };
 

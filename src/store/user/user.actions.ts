@@ -22,7 +22,7 @@ export const signUpStart = createAction<{
 
 export const signUpSuccess = createAction<{
   user: User;
-  additionalInformation: Record<string, any>;
+  additionalInformation: Record<string, unknown>;
 }>("user/SIGN_UP_SUCCESS");
 
 export const signUpFailed = createAction<string>("user/SIGN_UP_FAILED");

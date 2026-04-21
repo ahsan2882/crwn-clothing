@@ -1,5 +1,4 @@
 import { User, UserCredential } from "firebase/auth";
-import { eventChannel, EventChannel } from "redux-saga";
 import { all, call, put, take, takeLatest } from "redux-saga/effects";
 import {
   createAuthUserWithEmailAndPassword,
@@ -23,6 +22,7 @@ import {
   signUpStart,
   signUpSuccess,
 } from "./user.actions";
+import { eventChannel, EventChannel, END } from "redux-saga";
 
 type EmailSignInAction = ReturnType<typeof emailSignInStart>;
 type SignupAction = ReturnType<typeof signUpStart>;
@@ -80,8 +80,9 @@ export function* signInAfterSignUp({ payload }: SignInAfterSignUpAction) {
     const { user, additionalInformation } = payload;
     yield call(getSnapshotFromUserAuth, user, additionalInformation);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Sign up failed";
-    yield put(signUpFailed(message));
+    const message =
+      error instanceof Error ? error.message : "Sign in after sign up failed";
+    yield put(signInFailed(message));
   }
 }
 
@@ -109,16 +110,45 @@ export function* getSnapshotFromUserAuth(
   }
 }
 
+type AuthChannelAction =
+  | ReturnType<typeof signInSuccess>
+  | ReturnType<typeof signOutSuccess>;
+
+function createAuthChannel(): EventChannel<AuthChannelAction> {
+  return eventChannel<AuthChannelAction>((emit) => {
+    const unsubscribe = onAuthStateChangedListener((userAuth) => {
+      if (userAuth) {
+        emit(signInSuccess(userAuth)); // user signed in  → emit action
+      } else {
+        emit(signOutSuccess()); // user signed out → emit action (NOT null!)
+      }
+    });
+    // Return the unsubscribe function — redux-saga calls it on channel close
+    return unsubscribe;
+  });
+}
+
 export function* isUserAuthenticated() {
+  const authChannel: EventChannel<AuthChannelAction> =
+    yield call(createAuthChannel);
   try {
-    const userAuth: User | null = yield call(getCurrentUser);
-    if (userAuth) {
-      yield call(getSnapshotFromUserAuth, userAuth);
+    while (true) {
+      const action: AuthChannelAction = yield take(authChannel);
+
+      if (signInSuccess.match(action)) {
+        // Create/update the Firestore user document, then dispatch signInSuccess
+        yield call(getSnapshotFromUserAuth, action.payload);
+      } else if (signOutSuccess.match(action)) {
+        // Auth state changed to null (sign-out from any tab/device)
+        yield put(signOutSuccess());
+      }
     }
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to authenticate user";
     yield put(signInFailed(message));
+  } finally {
+    authChannel.close();
   }
 }
 

@@ -55,6 +55,7 @@ export const userReducer = createSlice({
       })
       .addCase(signOutFailed, (state, { payload }) => {
         state.isLoading = false;
+        state.hasLoaded = true;
         state.error = payload;
       })
       .addCase(googleSignInStart, (state) => {
