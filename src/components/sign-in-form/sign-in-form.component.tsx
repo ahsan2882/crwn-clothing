@@ -9,6 +9,11 @@ import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
 import { ButtonsContainer } from "./sign-in-form.styles";
+import { useAppDispatch } from "../../store/hooks";
+import {
+  emailSignInStart,
+  googleSignInStart,
+} from "../../store/user/user.actions";
 
 const defaultFormFields: AuthFormFields = {
   email: "",
@@ -16,23 +21,25 @@ const defaultFormFields: AuthFormFields = {
 };
 
 export default function SignInForm() {
+  const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
 
   const { email, password } = formFields;
 
   const signInWithGoogle = async () => {
-    try {
-      await signInWithGooglePopup();
-    } catch (error) {
-      console.error("Google sign-in failed", error);
-    }
+    // try {
+    //   await signInWithGooglePopup();
+    // } catch (error) {
+    //   console.error("Google sign-in failed", error);
+    // }
+    dispatch(googleSignInStart());
   };
 
   const onSubmitHandler = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await signInAuthUserWithEmailAndPassword(email, password);
+      dispatch(emailSignInStart({ email, password }));
       resetFormFields();
     } catch (error) {
       switch (error instanceof FirebaseError && error.code) {

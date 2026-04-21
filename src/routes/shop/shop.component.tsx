@@ -5,11 +5,11 @@ import {
   selectCategoriesHasLoaded,
   selectCategoriesIsLoading,
 } from "../../store/categories/category.selector";
-import { fetchCategoriesAsync } from "../../store/categories/category.thunk";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CategoriesPreview from "../categories-preview/categories-preview.component";
 import Category from "../category/category.component";
 import Spinner from "../../components/spinner/spinner.component";
+import { fetchCategoriesStart } from "../../store/categories/category.actions";
 
 export default function Shop() {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export default function Shop() {
   const error = useAppSelector(selectCategoriesError);
   useEffect(() => {
     if (!hasLoaded) {
-      dispatch(fetchCategoriesAsync());
+      dispatch(fetchCategoriesStart());
     }
   }, [dispatch, hasLoaded]);
   if (error) return <p>Error: {error}</p>;

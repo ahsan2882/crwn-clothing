@@ -14,6 +14,8 @@ import {
 import {
   collection,
   doc,
+  DocumentData,
+  DocumentSnapshot,
   getDoc,
   getDocs,
   getFirestore,
@@ -99,47 +101,43 @@ export const getCategoriesAndDocuments = async (
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation: Record<string, any> = {},
-) => {
-  if (!userAuth) return;
-  const userDocRef = doc(db, "users", userAuth.uid);
-  const userSnapshot = await getDoc(userDocRef);
-  if (!userSnapshot.exists()) {
-    const { displayName, email } = userAuth;
-    const createdAt = new Date();
-    try {
-      await setDoc(userDocRef, {
-        displayName,
-        email,
-        createdAt,
-        ...additionalInformation,
-      });
-    } catch (error) {
-      console.error("error creating the user", error);
-      throw error;
+): Promise<DocumentSnapshot<DocumentData, DocumentData>> => {
+  if (userAuth) {
+    const userDocRef = doc(db, "users", userAuth.uid);
+    const userSnapshot = await getDoc(userDocRef);
+    if (!userSnapshot.exists()) {
+      const { displayName, email } = userAuth;
+      const createdAt = new Date();
+      try {
+        await setDoc(userDocRef, {
+          displayName,
+          email,
+          createdAt,
+          ...additionalInformation,
+        });
+      } catch (error) {
+        console.error("error creating the user", error);
+        throw error;
+      }
     }
+    return userSnapshot;
   }
-  return userDocRef;
+  return Promise.reject();
 };
 
 export const createAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
-) => Promise<UserCredential | undefined> = async (
-  email: string,
-  password: string,
-) => {
-  if (!email || !password) return;
+) => Promise<UserCredential> = async (email: string, password: string) => {
+  if (!email || !password) return Promise.reject();
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const signInAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
-) => Promise<UserCredential | undefined> = async (
-  email: string,
-  password: string,
-) => {
-  if (!email || !password) return;
+) => Promise<UserCredential> = async (email: string, password: string) => {
+  if (!email || !password) return Promise.reject();
   return await signInWithEmailAndPassword(auth, email, password);
 };
 
@@ -148,3 +146,16 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = (
   callback: (user: User | null) => void,
 ) => onAuthStateChanged(auth, callback);
+
+export const getCurrentUser = (): Promise<User | null> => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject,
+    );
+  });
+};

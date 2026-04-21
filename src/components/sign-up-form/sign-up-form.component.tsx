@@ -9,9 +9,11 @@ import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 // import { UserContext } from "../../contexts/user.context";
 import { useDispatch } from "react-redux";
-import { setCurrentUser } from "../../store/user/user.reducer";
+// import { setCurrentUser } from "../../store/user/user.reducer";
 import { USER_ACTION_TYPES } from "../../store/user/user.types";
 import { FormContainerStyle } from "../shared/form.styles";
+import { useAppDispatch } from "../../store/hooks";
+import { signUpStart } from "../../store/user/user.actions";
 
 const defaultFormFields: AuthFormFields = {
   fullName: "",
@@ -20,7 +22,7 @@ const defaultFormFields: AuthFormFields = {
   confirmPassword: "",
 };
 export default function SignUpForm() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
   // const { setCurrentUser } = useContext(UserContext);
@@ -34,23 +36,27 @@ export default function SignUpForm() {
       return;
     }
     try {
-      const response = await createAuthUserWithEmailAndPassword(
-        email,
-        password,
-      );
-      if (response) {
-        const { user } = response;
+      // const response = await createAuthUserWithEmailAndPassword(
+      //   email,
+      //   password,
+      // );
+      // if (response) {
+      //   const { user } = response;
 
-        await createUserDocumentFromAuth(user, { displayName: fullName });
-        resetFormFields();
-        // setCurrentUser(user);
-        dispatch(
-          setCurrentUser({
-            type: USER_ACTION_TYPES.SET_CURRENT_USER,
-            user,
-          }),
-        );
+      //   await createUserDocumentFromAuth(user, { displayName: fullName });
+      //   resetFormFields();
+      // setCurrentUser(user);
+      // dispatch(
+      // setCurrentUser({
+      //   type: USER_ACTION_TYPES.SET_CURRENT_USER,
+      //   user,
+      // }),
+      // );
+      // }
+      if (email && password && confirmPassword && fullName) {
+        dispatch(signUpStart({ email, password, displayName: fullName }));
       }
+      resetFormFields();
     } catch (error) {
       if (
         error instanceof FirebaseError &&

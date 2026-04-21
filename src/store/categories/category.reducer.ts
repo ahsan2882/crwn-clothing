@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { CategoryState } from "../../models/category.model";
-import { fetchCategoriesAsync } from "./category.thunk";
+import {
+  fetchCategoriesStart,
+  fetchCategoriesSuccess,
+  fetchCategoriesFailure,
+} from "./category.actions";
 
 const INITIAL_STATE: CategoryState = {
   categories: [],
@@ -15,19 +19,20 @@ export const categoryReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCategoriesAsync.pending, (state) => {
+      .addCase(fetchCategoriesStart, (state) => {
         state.isLoading = true;
+        state.hasLoaded = false;
         state.error = null;
       })
-      .addCase(fetchCategoriesAsync.fulfilled, (state, { payload }) => {
+      .addCase(fetchCategoriesSuccess, (state, { payload }) => {
         state.isLoading = false;
         state.hasLoaded = true;
         state.error = null;
         state.categories = payload;
       })
-      .addCase(fetchCategoriesAsync.rejected, (state, { error }) => {
+      .addCase(fetchCategoriesFailure, (state, { payload }) => {
         state.isLoading = false;
-        state.error = error.message ?? "Failed to fetch categories";
+        state.error = payload;
       });
   },
 });
