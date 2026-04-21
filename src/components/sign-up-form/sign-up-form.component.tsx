@@ -53,9 +53,11 @@ export default function SignUpForm() {
       // }),
       // );
       // }
-      if (email && password && confirmPassword && fullName) {
-        dispatch(signUpStart({ email, password, displayName: fullName }));
+      if (!email || !password || !confirmPassword || !fullName) {
+        return;
       }
+
+      dispatch(signUpStart({ email, password, displayName: fullName }));
       resetFormFields();
     } catch (error) {
       if (

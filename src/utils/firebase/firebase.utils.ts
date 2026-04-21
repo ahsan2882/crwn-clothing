@@ -104,7 +104,7 @@ export const createUserDocumentFromAuth = async (
 ): Promise<DocumentSnapshot<DocumentData, DocumentData>> => {
   if (userAuth) {
     const userDocRef = doc(db, "users", userAuth.uid);
-    const userSnapshot = await getDoc(userDocRef);
+    let userSnapshot = await getDoc(userDocRef);
     if (!userSnapshot.exists()) {
       const { displayName, email } = userAuth;
       const createdAt = new Date();
@@ -115,6 +115,7 @@ export const createUserDocumentFromAuth = async (
           createdAt,
           ...additionalInformation,
         });
+        userSnapshot = await getDoc(userDocRef);
       } catch (error) {
         console.error("error creating the user", error);
         throw error;
@@ -122,14 +123,16 @@ export const createUserDocumentFromAuth = async (
     }
     return userSnapshot;
   }
-  return Promise.reject();
+  return Promise.reject(new Error("Missing authenticated user"));
 };
 
 export const createAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
 ) => Promise<UserCredential> = async (email: string, password: string) => {
-  if (!email || !password) return Promise.reject();
+  if (!email || !password) {
+    return Promise.reject(new Error("Email and password are required"));
+  }
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
@@ -137,7 +140,9 @@ export const signInAuthUserWithEmailAndPassword: (
   email: string,
   password: string,
 ) => Promise<UserCredential> = async (email: string, password: string) => {
-  if (!email || !password) return Promise.reject();
+  if (!email || !password) {
+    return Promise.reject(new Error("Email and password are required"));
+  }
   return await signInWithEmailAndPassword(auth, email, password);
 };
 

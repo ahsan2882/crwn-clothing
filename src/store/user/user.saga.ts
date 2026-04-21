@@ -1,8 +1,10 @@
-import { all, call, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest, take } from "redux-saga/effects";
+import { eventChannel, EventChannel } from "redux-saga";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
   getCurrentUser,
+  onAuthStateChangedListener,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
   signOutUser,
@@ -86,7 +88,7 @@ export function* signInAfterSignUp({ payload }: SignInAfterSignUpAction) {
 export function* signOut() {
   try {
     yield call(signOutUser);
-    yield put(signOutSuccess);
+    yield put(signOutSuccess());
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sign out failed";
     yield put(signOutFailed(message));
@@ -107,16 +109,30 @@ export function* getSnapshotFromUserAuth(
   }
 }
 
+function createAuthChannel(): EventChannel<User | null> {
+  return eventChannel<User | null>((emit) => {
+    const unsubscribe = onAuthStateChangedListener(emit);
+    return unsubscribe; // called by redux-saga when channel is closed
+  });
+}
+
 export function* isUserAuthenticated() {
+  const authChannel: EventChannel<User | null> = yield call(createAuthChannel);
   try {
-    const userAuth: User | null = yield call(getCurrentUser);
-    if (userAuth) {
-      yield call(getSnapshotFromUserAuth, userAuth);
+    while (true) {
+      const userAuth: User | null = yield take(authChannel);
+      if (userAuth) {
+        yield call(getSnapshotFromUserAuth, userAuth);
+      } else {
+        yield put(signOutSuccess());
+      }
     }
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to authenticate user";
     yield put(signInFailed(message));
+  } finally {
+    authChannel.close();
   }
 }
 

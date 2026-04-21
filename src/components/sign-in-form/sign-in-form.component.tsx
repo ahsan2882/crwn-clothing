@@ -36,23 +36,10 @@ export default function SignInForm() {
     dispatch(googleSignInStart());
   };
 
-  const onSubmitHandler = async (event: SubmitEvent<HTMLFormElement>) => {
+  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      dispatch(emailSignInStart({ email, password }));
-      resetFormFields();
-    } catch (error) {
-      switch (error instanceof FirebaseError && error.code) {
-        case "auth/invalid-credential":
-          alert("incorrect password for email");
-          break;
-        case "auth/user-not-found":
-          alert("no user associated with this email");
-          break;
-        default:
-          console.log(error);
-      }
-    }
+    dispatch(emailSignInStart({ email, password }));
+    resetFormFields();
   };
 
   const resetFormFields = () => {
