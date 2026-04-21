@@ -1,5 +1,5 @@
 import { Product } from "../../models/product.model";
-import { addItemToCart } from "../../store/cart/cart.reducer";
+import { addItemToCart } from "../../store/cart/cart.actions";
 import { useAppDispatch } from "../../store/hooks";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import {

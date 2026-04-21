@@ -3,7 +3,7 @@ import {
   addItemToCart,
   clearItemFromCart,
   removeItemFromCart,
-} from "../../store/cart/cart.reducer";
+} from "../../store/cart/cart.actions";
 import { useAppDispatch } from "../../store/hooks";
 import {
   CheckoutItemContainer,

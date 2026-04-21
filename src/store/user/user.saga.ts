@@ -4,6 +4,7 @@ import { all, call, put, take, takeLatest } from "redux-saga/effects";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
+  getCurrentUser,
   onAuthStateChangedListener,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
@@ -108,30 +109,16 @@ export function* getSnapshotFromUserAuth(
   }
 }
 
-function createAuthChannel(): EventChannel<User | null> {
-  return eventChannel<User | null>((emit) => {
-    const unsubscribe = onAuthStateChangedListener(emit);
-    return unsubscribe;
-  });
-}
-
 export function* isUserAuthenticated() {
-  const authChannel: EventChannel<User | null> = yield call(createAuthChannel);
   try {
-    while (true) {
-      const userAuth: User | null = yield take(authChannel);
-      if (userAuth) {
-        yield call(getSnapshotFromUserAuth, userAuth);
-      } else {
-        yield put(signOutSuccess());
-      }
+    const userAuth: User | null = yield call(getCurrentUser);
+    if (userAuth) {
+      yield call(getSnapshotFromUserAuth, userAuth);
     }
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to authenticate user";
     yield put(signInFailed(message));
-  } finally {
-    authChannel.close();
   }
 }
 
