@@ -1,10 +1,10 @@
-import { FirebaseError } from "firebase/app";
 import { ChangeEvent, SubmitEvent, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
+import { useAppDispatch } from "../../store/hooks";
 import {
-  signInAuthUserWithEmailAndPassword,
-  signInWithGooglePopup,
-} from "../../utils/firebase/firebase.utils";
+  emailSignInStart,
+  googleSignInStart,
+} from "../../store/user/user.actions";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
@@ -16,36 +16,21 @@ const defaultFormFields: AuthFormFields = {
 };
 
 export default function SignInForm() {
+  const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
 
   const { email, password } = formFields;
 
   const signInWithGoogle = async () => {
-    try {
-      await signInWithGooglePopup();
-    } catch (error) {
-      console.error("Google sign-in failed", error);
-    }
+    dispatch(googleSignInStart());
   };
 
-  const onSubmitHandler = async (event: SubmitEvent<HTMLFormElement>) => {
+  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await signInAuthUserWithEmailAndPassword(email, password);
-      resetFormFields();
-    } catch (error) {
-      switch (error instanceof FirebaseError && error.code) {
-        case "auth/invalid-credential":
-          alert("incorrect password for email");
-          break;
-        case "auth/user-not-found":
-          alert("no user associated with this email");
-          break;
-        default:
-          console.log(error);
-      }
-    }
+    if (!email || !password) return;
+    dispatch(emailSignInStart({ email, password }));
+    resetFormFields();
   };
 
   const resetFormFields = () => {
