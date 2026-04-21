@@ -3,7 +3,6 @@ import { all, call, put, take, takeLatest } from "redux-saga/effects";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
-  getCurrentUser,
   onAuthStateChangedListener,
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
@@ -22,7 +21,7 @@ import {
   signUpStart,
   signUpSuccess,
 } from "./user.actions";
-import { eventChannel, EventChannel, END } from "redux-saga";
+import { eventChannel, EventChannel } from "redux-saga";
 
 type EmailSignInAction = ReturnType<typeof emailSignInStart>;
 type SignupAction = ReturnType<typeof signUpStart>;
