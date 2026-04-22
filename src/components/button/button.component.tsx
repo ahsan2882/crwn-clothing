@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import {
   BaseButton,
+  ButtonSpinner,
   GoogleSignInButton,
   InvertedButton,
 } from "./button.styles";
@@ -19,6 +20,8 @@ interface ButtonProps {
   type: "button" | "submit" | "reset";
   buttonStyle?: ButtonType;
   onClickHandler?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+  isLoading?: boolean;
+  className?: string;
 }
 
 const getButton = (buttonType = BUTTON_TYPE_CLASSES.base) => {
@@ -35,11 +38,18 @@ export default function Button({
   type,
   buttonStyle,
   onClickHandler,
+  isLoading,
+  className,
 }: ButtonProps) {
   const CustomButton = getButton(buttonStyle);
   return (
-    <CustomButton type={type} onClick={onClickHandler}>
-      {children}
+    <CustomButton
+      type={type}
+      onClick={onClickHandler}
+      disabled={isLoading}
+      className={className}
+    >
+      {isLoading ? <ButtonSpinner></ButtonSpinner> : children}
     </CustomButton>
   );
 }
