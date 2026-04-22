@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
-import { selectCartTotal } from "../../store/cart/cart.selector";
+import { selectCartItems } from "../../store/cart/cart.selector";
 import { useAppSelector } from "../../store/hooks";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
@@ -11,8 +11,8 @@ import {
 } from "./payment-form.styles";
 
 export default function PaymentForm() {
-  const cartTotal = useAppSelector(selectCartTotal);
   const currentUser = useAppSelector(selectCurrentUser);
+  const cartItems = useAppSelector(selectCartItems);
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessingPayment, setIsProcessingPayment] =
@@ -22,32 +22,47 @@ export default function PaymentForm() {
 
     const cardElement = elements?.getElement(CardElement);
     if (stripe && elements && cardElement) {
-      setIsProcessingPayment(true);
-      const response = await fetch(
-        "/.netlify/functions/create-payment-intent",
-        {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: cartTotal * 100 }),
-        },
-      ).then((res) => res.json());
-      const clientSecret = response.paymentIntent.client_secret;
-      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: cardElement,
-          billing_details: {
-            name: currentUser ? currentUser.displayName : "Guest",
+      try {
+        setIsProcessingPayment(true);
+        const response = await fetch(
+          "/.netlify/functions/create-payment-intent",
+          {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              cartItems: cartItems.map(({ id, quantity }) => ({
+                id,
+                quantity,
+              })),
+            }),
           },
-        },
-      });
-      setIsProcessingPayment(false);
+        );
 
-      if (paymentResult.error) {
-        alert(paymentResult.error);
-      } else {
+        if (!response.ok) {
+          throw new Error("Unable to create payment intent");
+        }
+        const { paymentIntent } = await response.json();
+        const clientSecret = paymentIntent.client_secret;
+        const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: currentUser ? currentUser.displayName : "Guest",
+            },
+          },
+        });
+
+        if (paymentResult.error) {
+          alert(paymentResult.error);
+          return;
+        }
         if (paymentResult.paymentIntent.status === "succeeded") {
           alert("payment successful");
         }
+      } catch (error) {
+        alert(error instanceof Error ? error.message : "Payment failed");
+      } finally {
+        setIsProcessingPayment(false);
       }
     }
   };

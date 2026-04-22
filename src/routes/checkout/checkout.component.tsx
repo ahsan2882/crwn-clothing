@@ -39,7 +39,7 @@ export default function Checkout() {
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
       <Total>TOTAL: ${cartTotal.toFixed(2)}</Total>
-      <PaymentForm />
+      {cartItems.length > 0 && cartTotal > 0 && <PaymentForm />}
     </CheckoutContainer>
   );
 }

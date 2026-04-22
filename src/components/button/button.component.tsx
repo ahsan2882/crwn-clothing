@@ -21,6 +21,7 @@ interface ButtonProps {
   buttonStyle?: ButtonType;
   onClickHandler?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
   isLoading?: boolean;
+  className?: string;
 }
 
 const getButton = (buttonType = BUTTON_TYPE_CLASSES.base) => {
@@ -38,10 +39,16 @@ export default function Button({
   buttonStyle,
   onClickHandler,
   isLoading,
+  className,
 }: ButtonProps) {
   const CustomButton = getButton(buttonStyle);
   return (
-    <CustomButton type={type} onClick={onClickHandler} disabled={isLoading}>
+    <CustomButton
+      type={type}
+      onClick={onClickHandler}
+      disabled={isLoading}
+      className={className}
+    >
       {isLoading ? <ButtonSpinner></ButtonSpinner> : children}
     </CustomButton>
   );
