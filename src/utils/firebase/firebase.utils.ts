@@ -24,14 +24,7 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { ProductCollection } from "../../models/product.model";
-
-const getRequiredEnv = (key: string): string => {
-  const value = process.env[key];
-  if (!value) {
-    throw new Error(`Missing required Firebase env var: ${key}`);
-  }
-  return value;
-};
+import { getRequiredEnv } from "../secret.utils";
 
 const firebaseConfig = {
   apiKey: getRequiredEnv("REACT_APP_FIREBASE_API_KEY"),

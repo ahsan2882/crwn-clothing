@@ -1,4 +1,5 @@
 import { User, UserCredential } from "firebase/auth";
+import { eventChannel, EventChannel } from "redux-saga";
 import { all, call, put, take, takeLatest } from "redux-saga/effects";
 import {
   createAuthUserWithEmailAndPassword,
@@ -21,7 +22,6 @@ import {
   signUpStart,
   signUpSuccess,
 } from "./user.actions";
-import { eventChannel, EventChannel } from "redux-saga";
 
 type EmailSignInAction = ReturnType<typeof emailSignInStart>;
 type SignupAction = ReturnType<typeof signUpStart>;
