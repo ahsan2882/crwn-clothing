@@ -2273,6 +2273,18 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
   integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
+"@stripe/react-stripe-js@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-6.2.0.tgz#54765ffed9433e99e4e680f8efb4bbe7d7471d26"
+  integrity sha512-GSCErjljZEQv9LaxP30xGOwstcMyyUzb5JyihXwvjOU95yrfhbiPG4K2KkwxYxn+WY0/AyHsRhPPoGRw7urBzg==
+  dependencies:
+    prop-types "^15.7.2"
+
+"@stripe/stripe-js@^9.2.0":
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-9.2.0.tgz#2579b4c13ff2f1316c08e80b1bbec6dbb4d9b661"
+  integrity sha512-YSzLC0t6VS9MDdPTynSMqU8IxrItFUjkDORALFT6sSMR/XZ5Vgm3RDp/Gk7z727MC4A9s4MFVel0gF0c7+kdrg==
+
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz#ee34985952ca21558ab0d952f00298ad2190c053"
@@ -4587,6 +4599,11 @@ dotenv@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+
+dotenv@^17.4.2:
+  version "17.4.2"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-17.4.2.tgz#c07e54a746e11eba021dd9e1047ced5afdc1c034"
+  integrity sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==
 
 dunder-proto@^1.0.0, dunder-proto@^1.0.1:
   version "1.0.1"
@@ -8327,7 +8344,7 @@ prompts@^2.0.1, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.8.1:
+prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -9493,6 +9510,11 @@ strip-json-comments@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
+
+stripe@^22.0.2:
+  version "22.0.2"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-22.0.2.tgz#4e83a96de08d3afadf6cf0ddaf613a3a96cf4630"
+  integrity sha512-2/BLrQ3oB1zlNfeL/LfHFjTGx6EQn0j+ztrrTJHuDjV5VVIpk92oSDaxyKLUr3pG3dnee2LZqhFUv2Bf0G1/3g==
 
 style-loader@^3.3.1:
   version "3.3.4"

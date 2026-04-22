@@ -1,4 +1,5 @@
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
+import PaymentForm from "../../components/payment-form/payment-form.component";
 import {
   selectCartItems,
   selectCartTotal,
@@ -38,6 +39,7 @@ export default function Checkout() {
         <CheckoutItem key={cartItem.id} cartItem={cartItem} />
       ))}
       <Total>TOTAL: ${cartTotal.toFixed(2)}</Total>
+      <PaymentForm />
     </CheckoutContainer>
   );
 }
