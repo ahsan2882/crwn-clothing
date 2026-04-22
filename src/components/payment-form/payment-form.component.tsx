@@ -1,7 +1,7 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { SubmitEvent, useState } from "react";
 import { selectCartItems } from "../../store/cart/cart.selector";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import {
@@ -9,15 +9,20 @@ import {
   PaymentButton,
   PaymentFormContainer,
 } from "./payment-form.styles";
+import { clearCart } from "../../store/cart/cart.actions";
+import { useNavigate } from "react-router";
 
 export default function PaymentForm() {
   const currentUser = useAppSelector(selectCurrentUser);
   const cartItems = useAppSelector(selectCartItems);
   const stripe = useStripe();
   const elements = useElements();
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isProcessingPayment, setIsProcessingPayment] =
     useState<boolean>(false);
-  const paymentHandler = async (event: any) => {
+  const paymentHandler = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const cardElement = elements?.getElement(CardElement);
@@ -47,17 +52,19 @@ export default function PaymentForm() {
           payment_method: {
             card: cardElement,
             billing_details: {
-              name: currentUser ? currentUser.displayName : "Guest",
+              name: currentUser?.displayName ?? "Guest",
             },
           },
         });
 
         if (paymentResult.error) {
-          alert(paymentResult.error);
+          alert(paymentResult.error.message);
           return;
         }
         if (paymentResult.paymentIntent.status === "succeeded") {
           alert("payment successful");
+          dispatch(clearCart());
+          navigate("/shop");
         }
       } catch (error) {
         alert(error instanceof Error ? error.message : "Payment failed");

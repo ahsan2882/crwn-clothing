@@ -1,7 +1,8 @@
-import { ChangeEvent, SubmitEvent, useState } from "react";
+import { ChangeEvent, SubmitEvent, useEffect, useState } from "react";
 import { AuthFormFields } from "../../models/auth-form.model";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { signUpStart } from "../../store/user/user.actions";
+import { selectCurrentUser } from "../../store/user/user.selector";
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
@@ -14,8 +15,17 @@ const defaultFormFields: AuthFormFields = {
 };
 export default function SignUpForm() {
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectCurrentUser);
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isSubmitting && currentUser) {
+      setFormFields(defaultFormFields);
+      setIsSubmitting(false);
+    }
+  }, [currentUser, isSubmitting]);
 
   const { fullName, email, password, confirmPassword } = formFields;
 
@@ -29,11 +39,7 @@ export default function SignUpForm() {
       return;
     }
     dispatch(signUpStart({ email, password, displayName: fullName }));
-    resetFormFields();
-  };
-
-  const resetFormFields = () => {
-    setFormFields(defaultFormFields);
+    setIsSubmitting(true);
   };
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {

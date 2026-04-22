@@ -30,12 +30,14 @@ exports.handler = async (event) => {
 
     // Fetch canonical prices from Firestore
     const snapshot = await db.collection("categories").get();
-    const priceMap = {};
+    const priceMap = new Map();
     snapshot.forEach((doc) => {
       const { items } = doc.data();
       if (Array.isArray(items)) {
         items.forEach(({ id, price }) => {
-          priceMap[id] = price;
+          if (Number.isInteger(id) && Number.isFinite(price) && price >= 0) {
+            priceMap.set(id, price);
+          }
         });
       }
     });
@@ -43,11 +45,10 @@ exports.handler = async (event) => {
     // Recompute total server-side
     let total = 0;
     for (const { id, quantity } of cartItems) {
-      const price = priceMap[id];
-      if (price === undefined) {
+      if (!Number.isInteger(id) || id <= 0) {
         return {
           statusCode: 400,
-          body: JSON.stringify({ error: `Unknown product id: ${id}` }),
+          body: JSON.stringify({ error: `Invalid product id: ${id}` }),
         };
       }
       if (!Number.isInteger(quantity) || quantity <= 0) {
@@ -56,6 +57,14 @@ exports.handler = async (event) => {
           body: JSON.stringify({
             error: `Invalid quantity for product id: ${id}`,
           }),
+        };
+      }
+
+      const price = priceMap.get(id);
+      if (price === undefined) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: `Unknown product id: ${id}` }),
         };
       }
       total += price * quantity;
@@ -74,14 +83,13 @@ exports.handler = async (event) => {
       body: JSON.stringify({ paymentIntent }),
     };
   } catch (error) {
-    console.error(error);
+    console.error("create-payment-intent failed", {
+      message: error instanceof Error ? error.message : String(error),
+    });
     return {
       statusCode: 400,
       body: JSON.stringify({
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to create payment intent",
+        error: "Unable to create payment intent",
       }),
     };
   }

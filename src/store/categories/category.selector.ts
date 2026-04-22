@@ -11,15 +11,15 @@ export const selectCategories = createSelector([categoryState], (category) => {
 export const selectCategoriesMap = createSelector(
   [selectCategories],
   (categories) => {
-    return categories.reduce<Record<string, Product[]>>((acc, category) => {
-      const { title, items } = category;
-
-      if (title && typeof title === "string" && items) {
-        acc[title.toLowerCase()] = items;
-      }
-
-      return acc;
-    }, {});
+    return categories.reduce<Record<string, Product[]>>(
+      (acc, { title, items }) => {
+        if (title && Array.isArray(items)) {
+          acc[title.toLowerCase()] = items;
+        }
+        return acc;
+      },
+      {},
+    );
   },
 );
 

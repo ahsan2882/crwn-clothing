@@ -1,4 +1,3 @@
-import { UserState } from "../../models/user.model";
+import { RootState } from "../store";
 
-export const selectCurrentUser = (state: { user: UserState }) =>
-  state.user.currentUser;
+export const selectCurrentUser = (state: RootState) => state.user.currentUser;

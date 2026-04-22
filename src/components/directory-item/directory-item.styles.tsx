@@ -58,10 +58,10 @@ export const DirectoryItemContainer = styled.div`
   }
 
   &:first-child {
-    margin-right: 7.5px;
+    margin-left: 0;
   }
 
   &:last-child {
-    margin-left: 7.5px;
+    margin-right: 0;
   }
 `;

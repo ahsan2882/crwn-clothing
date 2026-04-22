@@ -27,13 +27,13 @@ import { ProductCollection } from "../../models/product.model";
 import { getRequiredEnv } from "../secret.utils";
 
 const firebaseConfig = {
-  apiKey: getRequiredEnv("REACT_APP_FIREBASE_API_KEY"),
-  authDomain: getRequiredEnv("REACT_APP_AUTH_DOMAIN"),
-  projectId: getRequiredEnv("REACT_APP_PROJECT_ID"),
-  storageBucket: getRequiredEnv("REACT_APP_STORAGE_BUCKET"),
-  messagingSenderId: getRequiredEnv("REACT_APP_MESSAGING_SENDER_ID"),
-  appId: getRequiredEnv("REACT_APP_APP_ID"),
-  measurementId: getRequiredEnv("REACT_APP_MEASUREMENT_ID"),
+  apiKey: getRequiredEnv(process.env.REACT_APP_FIREBASE_API_KEY),
+  authDomain: getRequiredEnv(process.env.REACT_APP_AUTH_DOMAIN),
+  projectId: getRequiredEnv(process.env.REACT_APP_PROJECT_ID),
+  storageBucket: getRequiredEnv(process.env.REACT_APP_STORAGE_BUCKET),
+  messagingSenderId: getRequiredEnv(process.env.REACT_APP_MESSAGING_SENDER_ID),
+  appId: getRequiredEnv(process.env.REACT_APP_APP_ID),
+  measurementId: getRequiredEnv(process.env.REACT_APP_MEASUREMENT_ID),
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
