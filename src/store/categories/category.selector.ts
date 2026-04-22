@@ -13,8 +13,8 @@ export const selectCategoriesMap = createSelector(
   (categories) => {
     return categories.reduce<Record<string, Product[]>>(
       (acc, { title, items }) => {
-        if (title && Array.isArray(items)) {
-          acc[title.toLowerCase()] = items;
+        if (typeof title === "string" && title.trim() && Array.isArray(items)) {
+          acc[title.trim().toLowerCase()] = items;
         }
         return acc;
       },

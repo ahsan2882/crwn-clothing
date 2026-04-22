@@ -19,7 +19,7 @@ export default function CartDropdown() {
     dispatch(setIsCartOpen(false));
   };
   return (
-    <CartDropdownContainer>
+    <CartDropdownContainer id="cart-dropdown">
       {cartItems.length > 0 ? (
         <CartItems>
           {cartItems.map((item) => (

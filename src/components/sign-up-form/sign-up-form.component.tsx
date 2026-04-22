@@ -18,14 +18,14 @@ export default function SignUpForm() {
   const currentUser = useAppSelector(selectCurrentUser);
   const [formFields, setFormFields] =
     useState<AuthFormFields>(defaultFormFields);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isSubmitting && currentUser) {
+    if (submittedEmail && currentUser?.email === submittedEmail) {
       setFormFields(defaultFormFields);
-      setIsSubmitting(false);
+      setSubmittedEmail(null);
     }
-  }, [currentUser, isSubmitting]);
+  }, [currentUser, submittedEmail]);
 
   const { fullName, email, password, confirmPassword } = formFields;
 
@@ -39,7 +39,7 @@ export default function SignUpForm() {
       return;
     }
     dispatch(signUpStart({ email, password, displayName: fullName }));
-    setIsSubmitting(true);
+    setSubmittedEmail(email);
   };
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
