@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { CartState } from "../../models/cart.model";
+import { RootState } from "../store";
 
-const cartState = (state: { cart: CartState }) => state.cart;
+const cartState = (state: RootState) => state.cart;
 
 export const selectIsCartOpen = createSelector(
   [cartState],

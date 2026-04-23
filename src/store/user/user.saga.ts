@@ -97,7 +97,7 @@ export function* signOut() {
 
 export function* getSnapshotFromUserAuth(
   userAuth: User,
-  additionalInformation: Record<string, any> = {},
+  additionalInformation: Record<string, unknown> = {},
 ) {
   try {
     yield call(createUserDocumentFromAuth, userAuth, additionalInformation);

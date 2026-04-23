@@ -1,5 +1,5 @@
 import { ChangeEvent, SubmitEvent, useState } from "react";
-import { AuthFormFields } from "../../models/auth-form.model";
+import { SignInFormFields } from "../../models/auth-form.model";
 import { useAppDispatch } from "../../store/hooks";
 import {
   emailSignInStart,
@@ -10,7 +10,7 @@ import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
 import { ButtonsContainer } from "./sign-in-form.styles";
 
-const defaultFormFields: AuthFormFields = {
+const defaultFormFields: SignInFormFields = {
   email: "",
   password: "",
 };
@@ -18,7 +18,7 @@ const defaultFormFields: AuthFormFields = {
 export default function SignInForm() {
   const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
-    useState<AuthFormFields>(defaultFormFields);
+    useState<SignInFormFields>(defaultFormFields);
 
   const { email, password } = formFields;
 

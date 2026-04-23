@@ -1,6 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { CategoryState } from "../../models/category.model";
-import { Product } from "../../models/product.model";
+import { CategoriesMap, CategoryState } from "../../models/category.model";
 
 const categoryState = (state: { category: CategoryState }) => state.category;
 
@@ -10,16 +9,13 @@ export const selectCategories = createSelector([categoryState], (category) => {
 
 export const selectCategoriesMap = createSelector(
   [selectCategories],
-  (categories) => {
-    return categories.reduce<Record<string, Product[]>>(
-      (acc, { title, items }) => {
-        if (typeof title === "string" && title.trim() && Array.isArray(items)) {
-          acc[title.trim().toLowerCase()] = items;
-        }
-        return acc;
-      },
-      {},
-    );
+  (categories): CategoriesMap => {
+    return categories.reduce<CategoriesMap>((acc, { title, items }) => {
+      if (typeof title === "string" && title.trim() && Array.isArray(items)) {
+        acc[title.trim().toLowerCase()] = items;
+      }
+      return acc;
+    }, {});
   },
 );
 
