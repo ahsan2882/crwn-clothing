@@ -1,4 +1,5 @@
-import { ProductCollection } from "./product.model";
+import { AsyncSliceState } from "./async-state.model";
+import { Product, ProductCollection } from "./product.model";
 
 export interface CategoryType {
   id: number;
@@ -7,10 +8,8 @@ export interface CategoryType {
   route: string;
 }
 
-export interface CategoryState {
+export interface CategoryState extends AsyncSliceState {
   categories: ProductCollection[];
-  isLoading: boolean;
-
-  hasLoaded: boolean;
-  error?: string | null;
 }
+
+export type CategoriesMap = Record<string, Product[]>;

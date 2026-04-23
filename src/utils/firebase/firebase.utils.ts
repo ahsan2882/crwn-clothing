@@ -96,7 +96,7 @@ export const getCategoriesAndDocuments = async (
 
 export const createUserDocumentFromAuth = async (
   userAuth: User,
-  additionalInformation: Record<string, any> = {},
+  additionalInformation: Record<string, unknown> = {},
 ): Promise<DocumentSnapshot<DocumentData, DocumentData>> => {
   if (userAuth) {
     const userDocRef = doc(db, "users", userAuth.uid);

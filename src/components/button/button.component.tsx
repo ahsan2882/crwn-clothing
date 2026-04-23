@@ -6,11 +6,11 @@ import {
   InvertedButton,
 } from "./button.styles";
 
-export const BUTTON_TYPE_CLASSES = {
-  base: "base",
-  google: "google-sign-in",
-  inverted: "inverted",
-} as const;
+export enum BUTTON_TYPE_CLASSES {
+  base = "base",
+  google = "google-sign-in",
+  inverted = "inverted",
+}
 
 type ButtonType =
   (typeof BUTTON_TYPE_CLASSES)[keyof typeof BUTTON_TYPE_CLASSES];
