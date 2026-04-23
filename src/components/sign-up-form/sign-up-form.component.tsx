@@ -1,5 +1,5 @@
 import { ChangeEvent, SubmitEvent, useEffect, useState } from "react";
-import { AuthFormFields } from "../../models/auth-form.model";
+import { SignUpFormFields } from "../../models/auth-form.model";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { signUpStart } from "../../store/user/user.actions";
 import { selectCurrentUser } from "../../store/user/user.selector";
@@ -7,7 +7,7 @@ import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import { FormContainerStyle } from "../shared/form.styles";
 
-const defaultFormFields: AuthFormFields = {
+const defaultFormFields: SignUpFormFields = {
   fullName: "",
   email: "",
   password: "",
@@ -17,7 +17,7 @@ export default function SignUpForm() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const [formFields, setFormFields] =
-    useState<AuthFormFields>(defaultFormFields);
+    useState<SignUpFormFields>(defaultFormFields);
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function SignUpForm() {
           label="Full Name"
           inputOptions={{
             inputName: "fullName",
-            value: fullName || "",
+            value: fullName,
             onChangeHandler: onChangeHandler,
             inputType: "text",
           }}
@@ -83,7 +83,7 @@ export default function SignUpForm() {
           label="Confirm Password"
           inputOptions={{
             inputName: "confirmPassword",
-            value: confirmPassword || "",
+            value: confirmPassword,
             onChangeHandler: onChangeHandler,
             inputType: "password",
           }}
