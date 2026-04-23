@@ -1,4 +1,11 @@
-import { ChangeEvent, SubmitEvent, useState } from "react";
+import {
+  ChangeEvent,
+  memo,
+  SubmitEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { SignInFormFields } from "../../models/auth-form.model";
 import { useAppDispatch } from "../../store/hooks";
 import {
@@ -15,55 +22,64 @@ const defaultFormFields: SignInFormFields = {
   password: "",
 };
 
-export default function SignInForm() {
+export default memo(function SignInForm() {
   const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<SignInFormFields>(defaultFormFields);
 
   const { email, password } = formFields;
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     dispatch(googleSignInStart());
-  };
+  }, [dispatch]);
 
-  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email || !password) return;
-    dispatch(emailSignInStart({ email, password }));
-    resetFormFields();
-  };
-
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     setFormFields(defaultFormFields);
-  };
+  }, []);
 
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
+  const onSubmitHandler = useCallback(
+    (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (!email || !password) return;
+      dispatch(emailSignInStart({ email, password }));
+      resetFormFields();
+    },
+    [dispatch, email, password, resetFormFields],
+  );
+
+  const onChangeHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setFormFields({ ...formFields, [name]: value });
+    },
+    [formFields],
+  );
+  const emailInputOptions = useMemo(
+    () => ({
+      inputName: "email",
+      value: email,
+      onChangeHandler,
+      inputType: "email" as const,
+    }),
+    [email, onChangeHandler],
+  );
+
+  const passwordInputOptions = useMemo(
+    () => ({
+      inputName: "password",
+      value: password,
+      onChangeHandler,
+      inputType: "password" as const,
+    }),
+    [password, onChangeHandler],
+  );
   return (
     <FormContainerStyle>
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={onSubmitHandler}>
-        <FormInput
-          label="Email"
-          inputOptions={{
-            inputName: "email",
-            value: email,
-            onChangeHandler: onChangeHandler,
-            inputType: "email",
-          }}
-        />
-        <FormInput
-          label="Password"
-          inputOptions={{
-            inputName: "password",
-            value: password,
-            onChangeHandler: onChangeHandler,
-            inputType: "password",
-          }}
-        />
+        <FormInput label="Email" inputOptions={emailInputOptions} />
+        <FormInput label="Password" inputOptions={passwordInputOptions} />
         <ButtonsContainer>
           <Button type="submit">Sign In</Button>
           <Button
@@ -77,4 +93,4 @@ export default function SignInForm() {
       </form>
     </FormContainerStyle>
   );
-}
+});

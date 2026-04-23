@@ -1,4 +1,4 @@
-import { type KeyboardEvent } from "react";
+import { memo, useCallback, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
 import { CategoryType } from "../../models/category.model";
 import {
@@ -7,7 +7,7 @@ import {
   DirectoryItemContainer,
 } from "./directory-item.styles";
 
-export default function DirectoryItem({
+export default memo(function DirectoryItem({
   category,
 }: {
   category: CategoryType;
@@ -15,15 +15,18 @@ export default function DirectoryItem({
   const { imageUrl, title, route } = category;
 
   const navigate = useNavigate();
-  const onNavigateHandler = () => {
+  const onNavigateHandler = useCallback(() => {
     navigate(route);
-  };
-  const onKeyHandler = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      onNavigateHandler();
-    }
-  };
+  }, [navigate, route]);
+  const onKeyHandler = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onNavigateHandler();
+      }
+    },
+    [onNavigateHandler],
+  );
   return (
     <DirectoryItemContainer
       role="button"
@@ -38,4 +41,4 @@ export default function DirectoryItem({
       </Body>
     </DirectoryItemContainer>
   );
-}
+});

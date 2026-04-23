@@ -1,6 +1,6 @@
 import { User, UserCredential } from "firebase/auth";
 import { eventChannel, EventChannel } from "redux-saga";
-import { all, call, put, take, takeLatest } from "redux-saga/effects";
+import { all, call, put, take, takeLatest } from "typed-redux-saga";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
@@ -29,69 +29,69 @@ type SignInAfterSignUpAction = ReturnType<typeof signUpSuccess>;
 
 export function* signInWithGoogle() {
   try {
-    const userCred: UserCredential = yield call(signInWithGooglePopup);
+    const userCred: UserCredential = yield* call(signInWithGooglePopup);
     const { user } = userCred;
-    yield call(getSnapshotFromUserAuth, user);
+    yield* call(getSnapshotFromUserAuth, user);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to sign in with google";
-    yield put(signInFailed(message));
+    yield* put(signInFailed(message));
   }
 }
 
 export function* signInWithEmail({ payload }: EmailSignInAction) {
   try {
     const { email, password } = payload;
-    const userCred: UserCredential = yield call(
+    const userCred: UserCredential = yield* call(
       signInAuthUserWithEmailAndPassword,
       email,
       password,
     );
     const { user } = userCred;
-    yield call(getSnapshotFromUserAuth, user);
+    yield* call(getSnapshotFromUserAuth, user);
   } catch (error) {
     const message =
       error instanceof Error
         ? error.message
         : "Failed to sign in with email/password";
-    yield put(signInFailed(message));
+    yield* put(signInFailed(message));
   }
 }
 
 export function* signUp({ payload }: SignupAction) {
   try {
     const { email, password, displayName } = payload;
-    const userCred: UserCredential = yield call(
+    const userCred: UserCredential = yield* call(
       createAuthUserWithEmailAndPassword,
       email,
       password,
     );
     const { user } = userCred;
-    yield put(signUpSuccess({ user, additionalInformation: { displayName } }));
+    yield* put(signUpSuccess({ user, additionalInformation: { displayName } }));
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sign up failed";
-    yield put(signUpFailed(message));
+    yield* put(signUpFailed(message));
   }
 }
 
 export function* signInAfterSignUp({ payload }: SignInAfterSignUpAction) {
   try {
     const { user, additionalInformation } = payload;
-    yield call(getSnapshotFromUserAuth, user, additionalInformation);
+    yield* call(getSnapshotFromUserAuth, user, additionalInformation);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Sign in after sign up failed";
-    yield put(signInFailed(message));
+    yield* put(signInFailed(message));
   }
 }
 
 export function* signOut() {
   try {
-    yield call(signOutUser);
-    yield put(signOutSuccess());
+    yield* call(signOutUser);
+    yield* put(signOutSuccess());
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sign out failed";
-    yield put(signOutFailed(message));
+    yield* put(signOutFailed(message));
   }
 }
 
@@ -100,12 +100,12 @@ export function* getSnapshotFromUserAuth(
   additionalInformation: Record<string, unknown> = {},
 ) {
   try {
-    yield call(createUserDocumentFromAuth, userAuth, additionalInformation);
-    yield put(signInSuccess(userAuth));
+    yield* call(createUserDocumentFromAuth, userAuth, additionalInformation);
+    yield* put(signInSuccess(userAuth));
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch userSnapshot";
-    yield put(signInFailed(message));
+    yield* put(signInFailed(message));
   }
 }
 
@@ -129,54 +129,54 @@ function createAuthChannel(): EventChannel<AuthChannelAction> {
 
 export function* isUserAuthenticated() {
   const authChannel: EventChannel<AuthChannelAction> =
-    yield call(createAuthChannel);
+    yield* call(createAuthChannel);
   try {
     while (true) {
-      const action: AuthChannelAction = yield take(authChannel);
+      const action: AuthChannelAction = yield* take(authChannel);
 
       if (signInSuccess.match(action)) {
         // Create/update the Firestore user document, then dispatch signInSuccess
-        yield call(getSnapshotFromUserAuth, action.payload);
+        yield* call(getSnapshotFromUserAuth, action.payload);
       } else if (signOutSuccess.match(action)) {
         // Auth state changed to null (sign-out from any tab/device)
-        yield put(signOutSuccess());
+        yield* put(signOutSuccess());
       }
     }
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to authenticate user";
-    yield put(signInFailed(message));
+    yield* put(signInFailed(message));
   } finally {
     authChannel.close();
   }
 }
 
 export function* onCheckUserSession() {
-  yield takeLatest(checkUserSession, isUserAuthenticated);
+  yield* takeLatest(checkUserSession, isUserAuthenticated);
 }
 
 export function* onGoogleSignInStart() {
-  yield takeLatest(googleSignInStart, signInWithGoogle);
+  yield* takeLatest(googleSignInStart, signInWithGoogle);
 }
 
 export function* onEmailSignInStart() {
-  yield takeLatest(emailSignInStart, signInWithEmail);
+  yield* takeLatest(emailSignInStart, signInWithEmail);
 }
 
 export function* onSignUpStart() {
-  yield takeLatest(signUpStart, signUp);
+  yield* takeLatest(signUpStart, signUp);
 }
 
 export function* onSignUpSuccess() {
-  yield takeLatest(signUpSuccess, signInAfterSignUp);
+  yield* takeLatest(signUpSuccess, signInAfterSignUp);
 }
 
 export function* onSignOutStart() {
-  yield takeLatest(signOutStart, signOut);
+  yield* takeLatest(signOutStart, signOut);
 }
 
 export function* userSagas() {
-  yield all([
+  yield* all([
     call(onCheckUserSession),
     call(onGoogleSignInStart),
     call(onEmailSignInStart),

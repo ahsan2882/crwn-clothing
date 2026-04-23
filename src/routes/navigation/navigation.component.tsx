@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { Outlet } from "react-router";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import Button, {
@@ -16,14 +17,14 @@ import {
   NavLinks,
 } from "./navigation.styles";
 
-export default function Navigation() {
+export default memo(function Navigation() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const isCartOpen = useAppSelector(selectIsCartOpen);
 
-  const signOutHandler = () => {
+  const signOutHandler = useCallback(() => {
     dispatch(signOutStart());
-  };
+  }, [dispatch]);
 
   return (
     <>
@@ -51,4 +52,4 @@ export default function Navigation() {
       <Outlet />
     </>
   );
-}
+});

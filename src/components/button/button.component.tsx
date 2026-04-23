@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { memo, MouseEventHandler, ReactNode } from "react";
 import {
   BaseButton,
   ButtonSpinner,
@@ -34,7 +34,7 @@ const buttonMap = {
   [BUTTON_TYPE_CLASSES.inverted]: InvertedButton,
 } as const;
 
-export default function Button({
+const Button = memo(function Button({
   children,
   type,
   buttonStyle,
@@ -53,4 +53,6 @@ export default function Button({
       {isLoading ? <ButtonSpinner></ButtonSpinner> : children}
     </CustomButton>
   );
-}
+});
+
+export default Button;

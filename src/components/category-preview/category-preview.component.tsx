@@ -4,6 +4,7 @@ import {
   Preview,
 } from "./category-preview.styles";
 
+import { memo } from "react";
 import { Product } from "../../models/product.model";
 import ProductCard from "../product-card/product-card.component";
 
@@ -12,7 +13,7 @@ type CategoryPreviewProps = {
   products: Product[];
 };
 
-export default function CategoryPreview({
+export default memo(function CategoryPreview({
   title,
   products,
 }: CategoryPreviewProps) {
@@ -28,4 +29,4 @@ export default function CategoryPreview({
       </Preview>
     </CategoryPreviewContainer>
   );
-}
+});

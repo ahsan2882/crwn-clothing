@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { Product } from "../../models/product.model";
 import { addItemToCart } from "../../store/cart/cart.actions";
 import { useAppDispatch } from "../../store/hooks";
@@ -13,13 +14,13 @@ interface ProductCardProps {
   product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default memo(function ProductCard({ product }: ProductCardProps) {
   const { name, imageUrl, price } = product;
 
   const dispatch = useAppDispatch();
-  const onAddToCartHandler = () => {
+  const onAddToCartHandler = useCallback(() => {
     dispatch(addItemToCart(product));
-  };
+  }, [dispatch, product]);
   return (
     <ProductCardContainer>
       <img src={imageUrl} alt={name} />
@@ -36,4 +37,4 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Button>
     </ProductCardContainer>
   );
-}
+});
