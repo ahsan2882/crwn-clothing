@@ -87,7 +87,7 @@ exports.handler = async (event) => {
       message: error instanceof Error ? error.message : String(error),
     });
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({
         error: "Unable to create payment intent",
       }),
