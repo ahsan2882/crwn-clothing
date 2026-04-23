@@ -12,4 +12,4 @@ export interface CategoryState extends AsyncSliceState {
   categories: ProductCollection[];
 }
 
-export type CategoriesMap = Partial<Record<string, Product[]>>;
+export type CategoriesMap = Record<string, Product[]>;
