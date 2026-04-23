@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { setIsCartOpen } from "../../store/cart/cart.actions";
 import { selectCartItems } from "../../store/cart/cart.selector";
@@ -19,14 +19,15 @@ const CartDropdown = memo(function CartDropdown() {
     navigate("/checkout");
     dispatch(setIsCartOpen(false));
   }, [dispatch, navigate]);
+
+  const cartItemList = useMemo(
+    () => cartItems.map((item) => <CartItem key={item.id} cartItem={item} />),
+    [cartItems],
+  );
   return (
     <CartDropdownContainer id="cart-dropdown">
       {cartItems.length > 0 ? (
-        <CartItems>
-          {cartItems.map((item) => (
-            <CartItem key={item.id} cartItem={item} />
-          ))}
-        </CartItems>
+        <CartItems>{cartItemList}</CartItems>
       ) : (
         <EmptyMessage>Your cart is empty</EmptyMessage>
       )}

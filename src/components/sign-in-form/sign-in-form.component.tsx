@@ -1,4 +1,11 @@
-import { ChangeEvent, memo, SubmitEvent, useCallback, useState } from "react";
+import {
+  ChangeEvent,
+  memo,
+  SubmitEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { SignInFormFields } from "../../models/auth-form.model";
 import { useAppDispatch } from "../../store/hooks";
 import {
@@ -47,29 +54,32 @@ export default memo(function SignInForm() {
     },
     [formFields],
   );
+  const emailInputOptions = useMemo(
+    () => ({
+      inputName: "email",
+      value: email,
+      onChangeHandler,
+      inputType: "email" as const,
+    }),
+    [email, onChangeHandler],
+  );
+
+  const passwordInputOptions = useMemo(
+    () => ({
+      inputName: "password",
+      value: password,
+      onChangeHandler,
+      inputType: "password" as const,
+    }),
+    [password, onChangeHandler],
+  );
   return (
     <FormContainerStyle>
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={onSubmitHandler}>
-        <FormInput
-          label="Email"
-          inputOptions={{
-            inputName: "email",
-            value: email,
-            onChangeHandler: onChangeHandler,
-            inputType: "email",
-          }}
-        />
-        <FormInput
-          label="Password"
-          inputOptions={{
-            inputName: "password",
-            value: password,
-            onChangeHandler: onChangeHandler,
-            inputType: "password",
-          }}
-        />
+        <FormInput label="Email" inputOptions={emailInputOptions} />
+        <FormInput label="Password" inputOptions={passwordInputOptions} />
         <ButtonsContainer>
           <Button type="submit">Sign In</Button>
           <Button
