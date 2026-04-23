@@ -17,10 +17,10 @@ export default function Shop() {
   const hasLoaded = useAppSelector(selectCategoriesHasLoaded);
   const error = useAppSelector(selectCategoriesError);
   useEffect(() => {
-    if (!hasLoaded) {
+    if (!hasLoaded && !isLoading && !error) {
       dispatch(fetchCategoriesStart());
     }
-  }, [dispatch, hasLoaded]);
+  }, [dispatch, error, hasLoaded, isLoading]);
   if (error) return <p>Error: {error}</p>;
   return isLoading ? (
     <Spinner />

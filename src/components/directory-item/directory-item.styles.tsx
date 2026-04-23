@@ -41,7 +41,7 @@ export const DirectoryItemContainer = styled.div`
   align-items: center;
   justify-content: center;
   border: 1px solid black;
-  margin: 0 7.5px 15px;
+  margin-bottom: 15px;
   overflow: hidden;
   &:hover,
   &:focus-visible {
@@ -55,13 +55,5 @@ export const DirectoryItemContainer = styled.div`
     & ${Body} {
       opacity: 0.9;
     }
-  }
-
-  &:first-child {
-    margin-right: 7.5px;
-  }
-
-  &:last-child {
-    margin-left: 7.5px;
   }
 `;

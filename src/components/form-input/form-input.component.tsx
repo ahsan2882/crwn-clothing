@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 import { FormInputField, FormInputLabel, Group } from "./form-input.styles";
 
 interface FormInputProps {
@@ -6,7 +7,7 @@ interface FormInputProps {
     inputName: string;
     value: string;
     inputType: string;
-    onChangeHandler: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
   };
 }
 

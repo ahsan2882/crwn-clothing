@@ -3,6 +3,7 @@ import { CartState } from "../../models/cart.model";
 import { CartItemType, Product } from "../../models/product.model";
 import {
   addItemToCart,
+  clearCart,
   clearItemFromCart,
   removeItemFromCart,
   setIsCartOpen,
@@ -30,6 +31,9 @@ export const cartReducer = createSlice({
       })
       .addCase(clearItemFromCart, (state, { payload }) => {
         state.cartItems = clearCartItem(state.cartItems, payload);
+      })
+      .addCase(clearCart, (state) => {
+        state.cartItems = [];
       });
   },
 });
