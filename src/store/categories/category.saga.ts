@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "typed-redux-saga";
 import { ProductCollection } from "../../models/product.model";
 import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
 import {
@@ -9,22 +9,22 @@ import {
 
 function* fetchCategories() {
   try {
-    const categories: ProductCollection[] = yield call(
+    const categories: ProductCollection[] = yield* call(
       getCategoriesAndDocuments,
       "categories",
     );
-    yield put(fetchCategoriesSuccess(categories));
+    yield* put(fetchCategoriesSuccess(categories));
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch categories";
-    yield put(fetchCategoriesFailure(message));
+    yield* put(fetchCategoriesFailure(message));
   }
 }
 
 export function* onFetchCategoriesStart() {
-  yield takeLatest(fetchCategoriesStart, fetchCategories);
+  yield* takeLatest(fetchCategoriesStart, fetchCategories);
 }
 
 export function* categoriesSagas() {
-  yield all([call(onFetchCategoriesStart)]);
+  yield* all([call(onFetchCategoriesStart)]);
 }

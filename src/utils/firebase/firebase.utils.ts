@@ -14,17 +14,16 @@ import {
 import {
   collection,
   doc,
-  DocumentData,
-  DocumentSnapshot,
   getDoc,
   getDocs,
   getFirestore,
   query,
+  QueryDocumentSnapshot,
   setDoc,
   writeBatch,
 } from "firebase/firestore";
-import { ProductCollection } from "../../models/product.model";
 import { getRequiredEnv } from "../secret.utils";
+import { ProductCollection } from "../../models/product.model";
 
 const firebaseConfig = {
   apiKey: getRequiredEnv(
@@ -70,13 +69,17 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore();
 
-export const addCollectionAndDocuments = async (
+export type ObjectToAdd = {
+  title: string;
+};
+
+export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
   collectionKey: string,
-  objectsToAdd: ProductCollection[],
+  objectsToAdd: T[],
 ) => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
-  objectsToAdd.forEach((object: ProductCollection) => {
+  objectsToAdd.forEach((object: T) => {
     const docRef = doc(collectionRef, object.title.toLowerCase());
     batch.set(docRef, object);
   });
@@ -94,10 +97,16 @@ export const getCategoriesAndDocuments = async (
   );
 };
 
+export type UserData = {
+  email: string;
+  createdAt: Date;
+  displayName: string;
+};
+
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation: Record<string, unknown> = {},
-): Promise<DocumentSnapshot<DocumentData, DocumentData>> => {
+): Promise<QueryDocumentSnapshot<UserData>> => {
   if (userAuth) {
     const userDocRef = doc(db, "users", userAuth.uid);
     let userSnapshot = await getDoc(userDocRef);
@@ -117,7 +126,7 @@ export const createUserDocumentFromAuth = async (
         throw error;
       }
     }
-    return userSnapshot;
+    return userSnapshot as QueryDocumentSnapshot<UserData>;
   }
   return Promise.reject(new Error("Missing authenticated user"));
 };

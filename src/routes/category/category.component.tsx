@@ -18,7 +18,8 @@ export default function Category() {
   const isLoading = useAppSelector(selectCategoriesIsLoading);
 
   const products: Product[] = useMemo(
-    () => (category ? (categoriesMap[category] ?? []) : []),
+    () =>
+      category ? (categoriesMap[category.trim().toLowerCase()] ?? []) : [],
     [category, categoriesMap],
   );
 
