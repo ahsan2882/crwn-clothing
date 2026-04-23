@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, memo } from "react";
 import { FormInputField, FormInputLabel, Group } from "./form-input.styles";
 
 interface FormInputProps {
@@ -11,7 +11,10 @@ interface FormInputProps {
   };
 }
 
-export default function FormInput({ label, inputOptions }: FormInputProps) {
+export default memo(function FormInput({
+  label,
+  inputOptions,
+}: FormInputProps) {
   const { inputName, value, inputType, onChangeHandler } = inputOptions;
 
   return (
@@ -31,4 +34,4 @@ export default function FormInput({ label, inputOptions }: FormInputProps) {
       )}
     </Group>
   );
-}
+});

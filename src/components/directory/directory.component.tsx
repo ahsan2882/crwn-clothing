@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { CategoryType } from "../../models/category.model";
 import DirectoryItem from "../directory-item/directory-item.component";
 import { DirectoryContainer } from "./directory.styles";
@@ -35,7 +36,7 @@ const categories: CategoryType[] = [
   },
 ];
 
-export default function Directory() {
+export default memo(function Directory() {
   return (
     <DirectoryContainer>
       {categories.map((category) => (
@@ -43,4 +44,4 @@ export default function Directory() {
       ))}
     </DirectoryContainer>
   );
-}
+});

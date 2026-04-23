@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { setIsCartOpen } from "../../store/cart/cart.actions";
 import { selectCartItems } from "../../store/cart/cart.selector";
@@ -10,14 +11,14 @@ import {
   EmptyMessage,
 } from "./cart-dropdown.styles";
 
-export default function CartDropdown() {
+const CartDropdown = memo(function CartDropdown() {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
   const navigate = useNavigate();
-  const goToCheckoutHandler = () => {
+  const goToCheckoutHandler = useCallback(() => {
     navigate("/checkout");
     dispatch(setIsCartOpen(false));
-  };
+  }, [dispatch, navigate]);
   return (
     <CartDropdownContainer id="cart-dropdown">
       {cartItems.length > 0 ? (
@@ -34,4 +35,5 @@ export default function CartDropdown() {
       </Button>
     </CartDropdownContainer>
   );
-}
+});
+export default CartDropdown;

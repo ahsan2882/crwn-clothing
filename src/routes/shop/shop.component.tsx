@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { Route, Routes } from "react-router";
 import Spinner from "../../components/spinner/spinner.component";
 import { fetchCategoriesStart } from "../../store/categories/category.actions";
@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import CategoriesPreview from "../categories-preview/categories-preview.component";
 import Category from "../category/category.component";
 
-export default function Shop() {
+export default memo(function Shop() {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectCategoriesIsLoading);
   const hasLoaded = useAppSelector(selectCategoriesHasLoaded);
@@ -30,4 +30,4 @@ export default function Shop() {
       <Route path=":category" element={<Category />} />
     </Routes>
   );
-}
+});

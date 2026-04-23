@@ -1,4 +1,4 @@
-import { ChangeEvent, SubmitEvent, useState } from "react";
+import { ChangeEvent, memo, SubmitEvent, useCallback, useState } from "react";
 import { SignInFormFields } from "../../models/auth-form.model";
 import { useAppDispatch } from "../../store/hooks";
 import {
@@ -15,32 +15,38 @@ const defaultFormFields: SignInFormFields = {
   password: "",
 };
 
-export default function SignInForm() {
+export default memo(function SignInForm() {
   const dispatch = useAppDispatch();
   const [formFields, setFormFields] =
     useState<SignInFormFields>(defaultFormFields);
 
   const { email, password } = formFields;
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     dispatch(googleSignInStart());
-  };
+  }, [dispatch]);
 
-  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email || !password) return;
-    dispatch(emailSignInStart({ email, password }));
-    resetFormFields();
-  };
-
-  const resetFormFields = () => {
+  const resetFormFields = useCallback(() => {
     setFormFields(defaultFormFields);
-  };
+  }, []);
 
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
+  const onSubmitHandler = useCallback(
+    (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (!email || !password) return;
+      dispatch(emailSignInStart({ email, password }));
+      resetFormFields();
+    },
+    [dispatch, email, password, resetFormFields],
+  );
+
+  const onChangeHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setFormFields({ ...formFields, [name]: value });
+    },
+    [formFields],
+  );
   return (
     <FormContainerStyle>
       <h2>Already have an account?</h2>
@@ -77,4 +83,4 @@ export default function SignInForm() {
       </form>
     </FormContainerStyle>
   );
-}
+});

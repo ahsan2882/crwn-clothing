@@ -1,4 +1,11 @@
-import { ChangeEvent, SubmitEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  memo,
+  SubmitEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { SignUpFormFields } from "../../models/auth-form.model";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { signUpStart } from "../../store/user/user.actions";
@@ -13,7 +20,7 @@ const defaultFormFields: SignUpFormFields = {
   password: "",
   confirmPassword: "",
 };
-export default function SignUpForm() {
+export default memo(function SignUpForm() {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
   const [formFields, setFormFields] =
@@ -29,23 +36,29 @@ export default function SignUpForm() {
 
   const { fullName, email, password, confirmPassword } = formFields;
 
-  const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!email || !password || !confirmPassword || !fullName) {
-      return;
-    }
-    if (password !== confirmPassword) {
-      alert("passwords do not match");
-      return;
-    }
-    dispatch(signUpStart({ email, password, displayName: fullName }));
-    setSubmittedEmail(email);
-  };
+  const onSubmitHandler = useCallback(
+    (event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (!email || !password || !confirmPassword || !fullName) {
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert("passwords do not match");
+        return;
+      }
+      dispatch(signUpStart({ email, password, displayName: fullName }));
+      setSubmittedEmail(email);
+    },
+    [confirmPassword, dispatch, email, fullName, password],
+  );
 
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormFields({ ...formFields, [name]: value });
-  };
+  const onChangeHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setFormFields({ ...formFields, [name]: value });
+    },
+    [formFields],
+  );
 
   return (
     <FormContainerStyle>
@@ -92,4 +105,4 @@ export default function SignUpForm() {
       </form>
     </FormContainerStyle>
   );
-}
+});
