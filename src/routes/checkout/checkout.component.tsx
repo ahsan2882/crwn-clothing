@@ -35,11 +35,17 @@ export default function Checkout() {
           <span>Remove</span>
         </HeaderBlock>
       </CheckoutHeader>
-      {cartItems.map((cartItem) => (
-        <CheckoutItem key={cartItem.id} cartItem={cartItem} />
-      ))}
-      <Total>TOTAL: ${cartTotal.toFixed(2)}</Total>
-      {cartItems.length > 0 && cartTotal > 0 && <PaymentForm />}
+      {cartItems.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <>
+          {cartItems.map((cartItem) => (
+            <CheckoutItem key={cartItem.id} cartItem={cartItem} />
+          ))}
+          <Total>TOTAL: ${cartTotal.toFixed(2)}</Total>
+          {cartTotal > 0 && <PaymentForm />}
+        </>
+      )}
     </CheckoutContainer>
   );
 }

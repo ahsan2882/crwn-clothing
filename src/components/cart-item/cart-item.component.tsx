@@ -1,7 +1,7 @@
 import { CartItemType } from "../../models/product.model";
 import {
   CartItemContainer,
-  Img,
+  CartItemImage,
   ItemDetails,
   ItemName,
 } from "./cart-item.styles";
@@ -14,7 +14,7 @@ export default function CartItem({ cartItem }: CartItemProps) {
   const { name, quantity, imageUrl, price } = cartItem;
   return (
     <CartItemContainer>
-      <Img src={imageUrl} alt={`${name}`} />
+      <CartItemImage src={imageUrl} alt={`${name}`} />
       <ItemDetails>
         <ItemName>{name}</ItemName>
         <span>
