@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useParams } from "react-router";
 
 import ProductCard from "../../components/product-card/product-card.component";
@@ -12,13 +12,14 @@ import {
 import { useAppSelector } from "../../store/hooks";
 import { CategoryContainer, CategoryTitle } from "./category.styles";
 
-export default function Category() {
+export default memo(function Category() {
   const { category } = useParams();
   const categoriesMap = useAppSelector(selectCategoriesMap);
   const isLoading = useAppSelector(selectCategoriesIsLoading);
 
   const products: Product[] = useMemo(
-    () => (category ? (categoriesMap[category] ?? []) : []),
+    () =>
+      category ? (categoriesMap[category.trim().toLowerCase()] ?? []) : [],
     [category, categoriesMap],
   );
 
@@ -40,4 +41,4 @@ export default function Category() {
       )}
     </>
   );
-}
+});

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import CheckoutItem from "../../components/checkout-item/checkout-item.component";
 import PaymentForm from "../../components/payment-form/payment-form.component";
 import {
@@ -12,7 +13,7 @@ import {
   Total,
 } from "./checkout.styles";
 
-export default function Checkout() {
+export default memo(function Checkout() {
   const cartItems = useAppSelector(selectCartItems);
   const cartTotal = useAppSelector(selectCartTotal);
 
@@ -48,4 +49,4 @@ export default function Checkout() {
       )}
     </CheckoutContainer>
   );
-}
+});

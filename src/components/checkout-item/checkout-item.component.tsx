@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { CartItemType } from "../../models/product.model";
 import {
   addItemToCart,
@@ -20,12 +21,21 @@ type CheckoutItemProps = {
   cartItem: CartItemType;
 };
 
-export default function CheckoutItem({ cartItem }: CheckoutItemProps) {
+export default memo(function CheckoutItem({ cartItem }: CheckoutItemProps) {
   const { name, imageUrl, price, quantity } = cartItem;
   const dispatch = useAppDispatch();
-  const clearItemHandler = () => dispatch(clearItemFromCart(cartItem));
-  const addItemHandler = () => dispatch(addItemToCart(cartItem));
-  const removeItemHandler = () => dispatch(removeItemFromCart(cartItem));
+  const clearItemHandler = useCallback(
+    () => dispatch(clearItemFromCart(cartItem)),
+    [dispatch, cartItem],
+  );
+  const addItemHandler = useCallback(
+    () => dispatch(addItemToCart(cartItem)),
+    [dispatch, cartItem],
+  );
+  const removeItemHandler = useCallback(
+    () => dispatch(removeItemFromCart(cartItem)),
+    [dispatch, cartItem],
+  );
   return (
     <CheckoutItemContainer>
       <ImageContainer>
@@ -56,4 +66,4 @@ export default function CheckoutItem({ cartItem }: CheckoutItemProps) {
       </RemoveButton>
     </CheckoutItemContainer>
   );
-}
+});
