@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import { persistReducer, persistStore } from "redux-persist";
-import localStorage from "redux-persist/es/storage";
+import storage from "redux-persist/lib/storage";
 import createSagaMiddleware from "redux-saga";
 import { rootReducer } from "./root.reducer";
 import { rootSaga } from "./root.saga";
@@ -10,7 +10,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "root",
-  storage: localStorage,
+  storage,
   whitelist: ["cart"],
 };
 

@@ -17,7 +17,7 @@ type ButtonType =
 
 interface ButtonProps {
   children: ReactNode;
-  type: "button" | "submit" | "reset";
+  type?: "button" | "submit" | "reset";
   buttonStyle?: ButtonType;
   onClickHandler?: MouseEventHandler<HTMLButtonElement>;
   isLoading?: boolean;
@@ -45,7 +45,7 @@ const Button = memo(function Button({
   const CustomButton = getButton(buttonStyle);
   return (
     <CustomButton
-      type={type}
+      type={type || "button"}
       onClick={onClickHandler}
       disabled={isLoading}
       className={className}

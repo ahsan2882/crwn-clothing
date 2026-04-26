@@ -30,7 +30,7 @@ export default memo(function Category() {
       ) : (
         category && (
           <>
-            <CategoryTitle>{category.toUpperCase()}</CategoryTitle>
+            <CategoryTitle>{category.trim().toUpperCase()}</CategoryTitle>
             <CategoryContainer>
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />

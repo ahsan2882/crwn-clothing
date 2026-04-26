@@ -83,7 +83,6 @@ export default memo(function SignInForm() {
         <ButtonsContainer>
           <Button type="submit">Sign In</Button>
           <Button
-            type="button"
             buttonStyle={BUTTON_TYPE_CLASSES.google}
             onClickHandler={signInWithGoogle}
           >
