@@ -7,7 +7,7 @@ import {
   fetchCategoriesSuccess,
 } from "./category.actions";
 
-function* fetchCategories() {
+export function* fetchCategories() {
   try {
     const categories: ProductCollection[] = yield* call(
       getCategoriesAndDocuments,

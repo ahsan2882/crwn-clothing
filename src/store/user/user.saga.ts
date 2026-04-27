@@ -109,11 +109,11 @@ export function* getSnapshotFromUserAuth(
   }
 }
 
-type AuthChannelAction =
+export type AuthChannelAction =
   | ReturnType<typeof signInSuccess>
   | ReturnType<typeof signOutSuccess>;
 
-function createAuthChannel(): EventChannel<AuthChannelAction> {
+export function createAuthChannel(): EventChannel<AuthChannelAction> {
   return eventChannel<AuthChannelAction>((emit) => {
     const unsubscribe = onAuthStateChangedListener((userAuth) => {
       if (userAuth) {
@@ -130,22 +130,26 @@ function createAuthChannel(): EventChannel<AuthChannelAction> {
 export function* isUserAuthenticated() {
   const authChannel: EventChannel<AuthChannelAction> =
     yield* call(createAuthChannel);
+
   try {
     while (true) {
-      const action: AuthChannelAction = yield* take(authChannel);
+      try {
+        const action: AuthChannelAction = yield* take(authChannel);
 
-      if (signInSuccess.match(action)) {
-        // Create/update the Firestore user document, then dispatch signInSuccess
-        yield* call(getSnapshotFromUserAuth, action.payload);
-      } else if (signOutSuccess.match(action)) {
-        // Auth state changed to null (sign-out from any tab/device)
-        yield* put(signOutSuccess());
+        if (signInSuccess.match(action)) {
+          yield* call(getSnapshotFromUserAuth, action.payload);
+        } else if (signOutSuccess.match(action)) {
+          yield* put(signOutSuccess());
+        }
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Failed to authenticate user";
+
+        yield* put(signInFailed(message));
       }
     }
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to authenticate user";
-    yield* put(signInFailed(message));
   } finally {
     authChannel.close();
   }

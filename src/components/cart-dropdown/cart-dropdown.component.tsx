@@ -31,9 +31,7 @@ const CartDropdown = memo(function CartDropdown() {
       ) : (
         <EmptyMessage>Your cart is empty</EmptyMessage>
       )}
-      <Button type="button" onClickHandler={goToCheckoutHandler}>
-        GO TO CHECKOUT
-      </Button>
+      <Button onClickHandler={goToCheckoutHandler}>GO TO CHECKOUT</Button>
     </CartDropdownContainer>
   );
 });

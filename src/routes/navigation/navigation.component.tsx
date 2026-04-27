@@ -36,7 +36,6 @@ export default memo(function Navigation() {
           <NavLink to="/shop">SHOP</NavLink>
           {currentUser ? (
             <Button
-              type="button"
               buttonStyle={BUTTON_TYPE_CLASSES.inverted}
               onClickHandler={signOutHandler}
             >

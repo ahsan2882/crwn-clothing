@@ -29,7 +29,6 @@ export default memo(function ProductCard({ product }: ProductCardProps) {
         <Price>{price}</Price>
       </Footer>
       <Button
-        type="button"
         buttonStyle={BUTTON_TYPE_CLASSES.inverted}
         onClickHandler={onAddToCartHandler}
       >

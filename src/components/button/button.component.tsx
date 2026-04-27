@@ -17,7 +17,7 @@ type ButtonType =
 
 interface ButtonProps {
   children: ReactNode;
-  type: "button" | "submit" | "reset";
+  type?: "button" | "submit" | "reset";
   buttonStyle?: ButtonType;
   onClickHandler?: MouseEventHandler<HTMLButtonElement>;
   isLoading?: boolean;
@@ -36,7 +36,7 @@ const buttonMap = {
 
 const Button = memo(function Button({
   children,
-  type,
+  type = "button",
   buttonStyle,
   onClickHandler,
   isLoading,
