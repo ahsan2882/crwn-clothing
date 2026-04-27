@@ -1,9 +1,9 @@
 import {
   selectCategories,
-  selectCategoriesMap,
-  selectCategoriesIsLoading,
-  selectCategoriesHasLoaded,
   selectCategoriesError,
+  selectCategoriesHasLoaded,
+  selectCategoriesIsLoading,
+  selectCategoriesMap,
 } from "../category.selector";
 
 describe("category selectors", () => {

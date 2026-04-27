@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { fetchCategoriesAsync } from "../category.thunk";
 import * as firebaseUtils from "../../../utils/firebase/firebase.utils";
+import { fetchCategoriesAsync } from "../category.thunk";
 
 jest.mock("../../../utils/firebase/firebase.utils", () => ({
   getCategoriesAndDocuments: jest.fn(),
@@ -35,6 +35,6 @@ describe("fetchCategoriesAsync thunk", () => {
 
     const result = await store.dispatch(fetchCategoriesAsync());
 
-    expect(result.type).toBe("category/fetchCategories/rejected");
+    expect((result as any).error?.message).toBe("Firebase error");
   });
 });

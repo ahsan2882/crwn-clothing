@@ -1,4 +1,5 @@
-import { screen, render } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import CartItem from "../cart-item.component";
 
 describe("Cart item - rendering", () => {
@@ -11,17 +12,17 @@ describe("Cart item - rendering", () => {
   };
 
   it("renders product name", () => {
-    render(<CartItem cartItem={mockCartItem} />);
+    renderWithProviders(<CartItem cartItem={mockCartItem} />);
     expect(screen.getByText("Test Product")).toBeInTheDocument();
   });
 
   it("renders quantity and price correctly", () => {
-    render(<CartItem cartItem={mockCartItem} />);
+    renderWithProviders(<CartItem cartItem={mockCartItem} />);
     expect(screen.getByText("2 x $50")).toBeInTheDocument();
   });
 
   it("renders product image with correct src and alt", () => {
-    render(<CartItem cartItem={mockCartItem} />);
+    renderWithProviders(<CartItem cartItem={mockCartItem} />);
     const image = screen.getByRole("img");
     expect(image).toHaveAttribute("src", "https://test.com/image.png");
     expect(image).toHaveAttribute("alt", "Test Product");

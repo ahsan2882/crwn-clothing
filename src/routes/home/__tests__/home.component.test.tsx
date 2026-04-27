@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import Home from "../home.component";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import Home from "../home.component";
 
 // ----------------------
 // Mocks

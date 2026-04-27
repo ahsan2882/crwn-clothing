@@ -1,8 +1,8 @@
 import {
-  selectIsCartOpen,
-  selectCartItems,
   selectCartCount,
+  selectCartItems,
   selectCartTotal,
+  selectIsCartOpen,
 } from "../cart.selector";
 
 describe("cart selectors", () => {
@@ -25,7 +25,7 @@ describe("cart selectors", () => {
   });
 
   it("selectCartCount", () => {
-    // (2*1 + 3*1)
+    // sum of quantities: 2 + 3 = 5
     expect(selectCartCount(mockState)).toBe(5);
   });
 

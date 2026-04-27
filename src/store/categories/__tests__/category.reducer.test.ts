@@ -1,9 +1,9 @@
-import { categoryReducers } from "../category.reducer";
 import {
+  fetchCategoriesFailure,
   fetchCategoriesStart,
   fetchCategoriesSuccess,
-  fetchCategoriesFailure,
 } from "../category.actions";
+import { categoryReducers } from "../category.reducer";
 
 describe("category reducer", () => {
   const initialState = {

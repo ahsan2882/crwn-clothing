@@ -1,7 +1,7 @@
+import { screen } from "@testing-library/react";
 import { useAppSelector } from "../../../store/hooks";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import CategoriesPreview from "../categories-preview.component";
-import { screen } from "@testing-library/react";
 
 jest.mock("../../../store/hooks", () => ({
   useAppSelector: jest.fn(),

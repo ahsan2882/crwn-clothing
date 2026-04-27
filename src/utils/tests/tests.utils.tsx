@@ -2,9 +2,9 @@ import { EnhancedStore, configureStore } from "@reduxjs/toolkit";
 import { RenderOptions, render } from "@testing-library/react";
 import { PropsWithChildren } from "react";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router";
 import { rootReducer } from "../../store/root.reducer";
 import { RootState } from "../../store/store";
-import { BrowserRouter } from "react-router";
 
 export interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
@@ -24,7 +24,6 @@ export const renderWithProviders = (
   const Wrapper = ({ children }: PropsWithChildren) => (
     <Provider store={store}>
       <BrowserRouter>{children}</BrowserRouter>
-      {/* {children} */}
     </Provider>
   );
 

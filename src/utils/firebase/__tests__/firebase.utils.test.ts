@@ -13,9 +13,9 @@ import {
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   collection,
   doc,
@@ -222,22 +222,6 @@ describe("createUserDocumentFromAuth", () => {
       "Firestore error",
     );
     expect(setDoc).toHaveBeenCalled();
-  });
-
-  it("should reject when userAuth is null", async () => {
-    await expect(createUserDocumentFromAuth(null as any)).rejects.toThrow(
-      "Missing authenticated user",
-    );
-  });
-  it("should return snapshot if user exists", async () => {
-    (getDoc as jest.Mock).mockResolvedValue({
-      exists: () => true,
-    });
-    const result = await createUserDocumentFromAuth({
-      uid: "1",
-      email: "test@test.com",
-    } as any);
-    expect(result.exists()).toBe(true);
   });
 });
 

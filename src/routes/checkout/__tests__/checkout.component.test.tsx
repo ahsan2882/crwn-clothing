@@ -1,7 +1,11 @@
 import { screen } from "@testing-library/react";
-import Checkout from "../checkout.component";
 import { useAppSelector } from "../../../store/hooks";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import Checkout from "../checkout.component";
+import {
+  selectCartItems,
+  selectCartTotal,
+} from "../../../store/cart/cart.selector";
 
 // ----------------------
 // Mocks
@@ -9,6 +13,14 @@ import { renderWithProviders } from "../../../utils/tests/tests.utils";
 jest.mock("../../../store/hooks", () => ({
   useAppSelector: jest.fn(),
 }));
+
+const mockSelectors = (items: any[], total: number) => {
+  (useAppSelector as jest.Mock).mockImplementation((selector) => {
+    if (selector === selectCartItems) return items;
+    if (selector === selectCartTotal) return total;
+    return undefined;
+  });
+};
 
 jest.mock("../../../components/checkout-item/checkout-item.component", () => ({
   __esModule: true,
@@ -28,9 +40,7 @@ describe("Checkout", () => {
   });
 
   it("renders checkout headers", () => {
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce([]) // cartItems
-      .mockReturnValueOnce(0); // cartTotal
+    mockSelectors([], 0);
     renderWithProviders(<Checkout />);
     expect(screen.getByText(/product/i)).toBeInTheDocument();
     expect(screen.getByText(/description/i)).toBeInTheDocument();
@@ -40,18 +50,14 @@ describe("Checkout", () => {
   });
 
   it("renders empty cart message when no items", () => {
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce([]) // cartItems
-      .mockReturnValueOnce(0); // cartTotal
+    mockSelectors([], 0);
     renderWithProviders(<Checkout />);
     expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
   });
 
   it("renders cart items when present", () => {
     const mockItems = [{ id: 1 }, { id: 2 }];
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce(mockItems)
-      .mockReturnValueOnce(50);
+    mockSelectors(mockItems, 50);
     renderWithProviders(<Checkout />);
     expect(
       screen.getByRole("region", { name: /cart-item-1/i }),
@@ -62,9 +68,7 @@ describe("Checkout", () => {
   });
 
   it("renders total amount correctly", () => {
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce([{ id: 1 }])
-      .mockReturnValueOnce(123.456);
+    mockSelectors([{ id: 1 }], 123.456);
     renderWithProviders(<Checkout />);
     expect(screen.getByText("TOTAL: $123.46")).toBeInTheDocument();
   });
@@ -73,6 +77,7 @@ describe("Checkout", () => {
     (useAppSelector as jest.Mock)
       .mockReturnValueOnce([{ id: 1 }])
       .mockReturnValueOnce(10);
+    mockSelectors([{ id: 1 }], 10);
     renderWithProviders(<Checkout />);
     expect(
       screen.getByRole("region", { name: /payment-form/i }),
@@ -80,9 +85,7 @@ describe("Checkout", () => {
   });
 
   it("does not render payment form when total is 0", () => {
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce([{ id: 1 }])
-      .mockReturnValueOnce(0);
+    mockSelectors([{ id: 1 }], 0);
     renderWithProviders(<Checkout />);
     expect(
       screen.queryByRole("region", { name: /payment-form/i }),
@@ -91,9 +94,7 @@ describe("Checkout", () => {
 
   it("renders correct number of checkout items", () => {
     const mockItems = [{ id: 1 }, { id: 2 }, { id: 3 }];
-    (useAppSelector as jest.Mock)
-      .mockReturnValueOnce(mockItems)
-      .mockReturnValueOnce(30);
+    mockSelectors(mockItems, 30);
     renderWithProviders(<Checkout />);
     expect(screen.getAllByRole("region", { name: /cart-item/i })).toHaveLength(
       3,

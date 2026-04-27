@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { fireEvent, screen } from "@testing-library/react";
+import { User } from "firebase/auth";
+import { CartState } from "../../../models/cart.model";
+import { UserState } from "../../../models/user.model";
+import { rootReducer } from "../../../store/root.reducer";
+import { signOutStart } from "../../../store/user/user.actions";
 import {
   ExtendedRenderOptions,
   renderWithProviders,
 } from "../../../utils/tests/tests.utils";
 import Navigation from "../navigation.component";
-import { fireEvent, screen } from "@testing-library/react";
-import { rootReducer } from "../../../store/root.reducer";
-import { User } from "firebase/auth";
-import { UserState } from "../../../models/user.model";
-import { CartState } from "../../../models/cart.model";
-import { signOutStart } from "../../../store/user/user.actions";
 
 jest.mock("../../../components/cart-icon/cart-icon.component", () => () => (
   <div data-testid="cart-icon" />

@@ -1,16 +1,16 @@
-import { userReducers } from "../user.reducer";
 import {
   checkUserSession,
-  signInSuccess,
-  signInFailed,
-  signOutSuccess,
-  signOutFailed,
-  googleSignInStart,
   emailSignInStart,
-  signUpStart,
+  googleSignInStart,
+  signInFailed,
+  signInSuccess,
+  signOutFailed,
   signOutStart,
+  signOutSuccess,
   signUpFailed,
+  signUpStart,
 } from "../user.actions";
+import { userReducers } from "../user.reducer";
 
 describe("user reducer", () => {
   const initialState = {
@@ -73,6 +73,7 @@ describe("user reducer", () => {
 
     expect(state).toEqual({
       currentUser: null,
+
       isLoading: false,
       hasLoaded: false,
       error: "Sign up failed",

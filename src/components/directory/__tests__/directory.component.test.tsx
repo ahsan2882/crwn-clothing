@@ -1,6 +1,6 @@
+import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import Directory from "../directory.component";
-import { screen } from "@testing-library/react";
 
 jest.mock("../../directory-item/directory-item.component", () => ({
   __esModule: true,

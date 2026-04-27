@@ -1,10 +1,10 @@
-import { act, fireEvent, screen } from "@testing-library/react";
-import CartDropdown from "../cart-dropdown.component";
-import { renderWithProviders } from "../../../utils/tests/tests.utils";
-import { addItemToCart, clearCart } from "../../../store/cart/cart.actions";
-import { CartItemType } from "../../../models/product.model";
 import { configureStore } from "@reduxjs/toolkit";
+import { act, fireEvent, screen } from "@testing-library/react";
+import { CartItemType } from "../../../models/product.model";
+import { addItemToCart, clearCart } from "../../../store/cart/cart.actions";
 import { rootReducer } from "../../../store/root.reducer";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import CartDropdown from "../cart-dropdown.component";
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
@@ -13,13 +13,6 @@ jest.mock("react-router", () => ({
 }));
 
 const mockCartItemRenderSpy = jest.fn();
-
-jest.mock("../../cart-item/cart-item.component", () => ({
-  __esModule: true,
-  default: ({ cartItem }: { cartItem: CartItemType }) => (
-    <div data-testid="cart-item">{cartItem.name}</div>
-  ),
-}));
 
 // // Mock child components
 jest.mock("../../cart-item/cart-item.component", () => ({
@@ -94,7 +87,6 @@ describe("CartDropdown - render", () => {
     renderWithProviders(<CartDropdown />, {
       preloadedState: { cart: { cartItems: [], isCartOpen: false } },
     });
-
     expect(screen.getByTestId("empty-message")).toHaveTextContent(
       "Your cart is empty",
     );
@@ -126,7 +118,6 @@ describe("CartDropdown - render", () => {
         },
       },
     });
-
     expect(screen.queryByText("Your cart is empty")).not.toBeInTheDocument();
   });
 });
@@ -139,11 +130,9 @@ describe("CartDropdown - reactivity", () => {
         isCartOpen: true,
       },
     };
-
     const { store } = renderWithProviders(<CartDropdown />, {
       preloadedState: initialState,
     });
-
     // initial empty state
     expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
     expect(screen.queryAllByTestId("cart-item")).toHaveLength(0);
@@ -156,7 +145,6 @@ describe("CartDropdown - reactivity", () => {
     act(() => {
       store.dispatch(addItemToCart(newMockItem));
     });
-
     // UI should update automatically via selector
     expect(screen.queryByText(/your cart is empty/i)).not.toBeInTheDocument();
 
@@ -170,27 +158,28 @@ describe("CartDropdown - reactivity", () => {
         isCartOpen: true,
       },
     };
-
     const { store } = renderWithProviders(<CartDropdown />, {
       preloadedState: initialState,
     });
-
     // initial empty state
     expect(screen.queryByText(/your cart is empty/i)).not.toBeInTheDocument();
     expect(screen.queryAllByTestId("cart-item")).toHaveLength(2);
     act(() => {
       store.dispatch(clearCart());
     });
-
     // UI should update automatically via selector
     expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
-
     const items = screen.queryAllByTestId("cart-item");
     expect(items).toHaveLength(0);
   });
 });
 
 describe("CartDropdown - checkout handler", () => {
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    dispatchSpy.mockClear();
+  });
+
   it("navigates to /checkout on click", () => {
     renderWithProviders(<CartDropdown />);
     fireEvent.click(screen.getByRole("button", { name: "GO TO CHECKOUT" }));

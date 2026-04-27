@@ -2,19 +2,18 @@ import { runSaga } from "redux-saga";
 import * as firebase from "../../../utils/firebase/firebase.utils";
 import * as userSaga from "../user.saga";
 
-import {
-  signInSuccess,
-  signInFailed,
-  signUpSuccess,
-  signOutSuccess,
-  googleSignInStart,
-  emailSignInStart,
-  signUpStart,
-  signOutStart,
-  checkUserSession,
-} from "../user.actions";
 import { User } from "firebase/auth";
-import { takeLatest } from "typed-redux-saga";
+import {
+  checkUserSession,
+  emailSignInStart,
+  googleSignInStart,
+  signInFailed,
+  signInSuccess,
+  signOutStart,
+  signOutSuccess,
+  signUpStart,
+  signUpSuccess,
+} from "../user.actions";
 
 jest.mock("../../../utils/firebase/firebase.utils");
 
@@ -179,7 +178,7 @@ describe("user saga", () => {
         },
       } as any,
     ).toPromise();
-    expect(dispatched.length).toBeGreaterThanOrEqual(0);
+    expect(dispatched).toContainEqual(signInSuccess({ uid: "1" } as any));
   });
 
   it("signInAfterSignUp → error fallback message", async () => {
@@ -205,9 +204,10 @@ describe("user saga", () => {
 
   it("watches google sign in", () => {
     const gen = userSaga.onGoogleSignInStart();
-    expect(gen.next().value).toMatchObject(
-      takeLatest(googleSignInStart, userSaga.signInWithGoogle),
-    );
+    const effect = gen.next().value as any;
+    expect(effect.type).toBe("FORK");
+    expect(effect.payload.args[0]).toBe(googleSignInStart);
+    expect(effect.payload.args[1]).toBe(userSaga.signInWithGoogle);
   });
 
   describe("signInAfterSignUp", () => {

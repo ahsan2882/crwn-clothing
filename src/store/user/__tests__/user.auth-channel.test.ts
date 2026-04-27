@@ -1,8 +1,8 @@
+import { User } from "firebase/auth";
 import { eventChannel } from "redux-saga";
-import { createAuthChannel } from "../user.saga";
 import * as firebase from "../../../utils/firebase/firebase.utils";
 import { signInSuccess, signOutSuccess } from "../user.actions";
-import { User } from "firebase/auth";
+import { createAuthChannel } from "../user.saga";
 
 jest.mock("redux-saga", () => ({
   eventChannel: jest.fn(),
@@ -13,6 +13,9 @@ jest.mock("../../../utils/firebase/firebase.utils", () => ({
 }));
 
 describe("user saga auth channel", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it("should emit signInSuccess when user exists", () => {
     const emitMock = jest.fn();
     const unsubscribeMock = jest.fn();
@@ -30,6 +33,7 @@ describe("user saga auth channel", () => {
     expect(emitMock).toHaveBeenCalledWith(
       signInSuccess({ uid: "1", email: "test@test.com" } as User),
     );
+    expect(firebase.onAuthStateChangedListener).toHaveBeenCalledTimes(1);
   });
 
   it("should emit signOutSuccess when user is null", () => {

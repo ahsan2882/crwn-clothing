@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import Authentication from "../authentication.component";
 
 jest.mock("../../../components/sign-in-form/sign-in-form.component", () => ({
@@ -13,7 +14,7 @@ jest.mock("../../../components/sign-up-form/sign-up-form.component", () => ({
 
 describe("Authentication", () => {
   it("renders both authentication forms", () => {
-    render(<Authentication />);
+    renderWithProviders(<Authentication />);
 
     expect(
       screen.getByRole("region", { name: /sign-in-form/i }),
@@ -25,7 +26,7 @@ describe("Authentication", () => {
   });
 
   it("renders exactly two regions (forms)", () => {
-    render(<Authentication />);
+    renderWithProviders(<Authentication />);
 
     expect(screen.getAllByRole("region")).toHaveLength(2);
   });

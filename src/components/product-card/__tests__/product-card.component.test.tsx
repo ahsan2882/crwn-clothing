@@ -1,11 +1,11 @@
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import { addItemToCart } from "../../../store/cart/cart.actions";
-import { renderWithProviders } from "../../../utils/tests/tests.utils";
-import ProductCard from "../product-card.component";
 import { fireEvent, screen } from "@testing-library/react";
+import { Product } from "../../../models/product.model";
+import { addItemToCart } from "../../../store/cart/cart.actions";
 import { rootReducer } from "../../../store/root.reducer";
 import { RootState } from "../../../store/store";
-import { Product } from "../../../models/product.model";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import ProductCard from "../product-card.component";
 
 describe("ProductCard", () => {
   const mockProduct = {

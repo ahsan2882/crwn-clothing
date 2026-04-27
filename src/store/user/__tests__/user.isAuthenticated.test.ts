@@ -1,6 +1,6 @@
-import * as saga from "../user.saga";
-import { signInSuccess, signOutSuccess, signInFailed } from "../user.actions";
 import { User } from "firebase/auth";
+import { signInFailed, signInSuccess, signOutSuccess } from "../user.actions";
+import * as saga from "../user.saga";
 import * as userSaga from "../user.saga";
 
 const mockUser = { uid: "test-uid", email: "test@test.com" } as User;
@@ -11,18 +11,21 @@ function makeMockChannel() {
 }
 
 describe("user saga isAuthenticated", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it("should handle signInSuccess from channel", async () => {
-    const fakeChannel = {
-      close: jest.fn(),
-    };
     const mockAction = signInSuccess({ uid: "1" } as any);
-    jest.spyOn(saga, "createAuthChannel").mockReturnValue(fakeChannel as any);
+    jest
+      .spyOn(saga, "createAuthChannel")
+      .mockReturnValue(makeMockChannel() as any);
     const gen = saga.isUserAuthenticated();
     // 1. call createAuthChannel
     gen.next();
     // 2. take action
     gen.next(mockAction);
-    expect(fakeChannel.close).not.toHaveBeenCalled();
+    expect(makeMockChannel().close).not.toHaveBeenCalled();
   });
 });
 

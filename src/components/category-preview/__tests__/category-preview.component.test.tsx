@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import CategoryPreview from "../category-preview.component";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import CategoryPreview from "../category-preview.component";
 
 jest.mock("../../product-card/product-card.component", () => ({
   __esModule: true,
@@ -49,7 +49,6 @@ describe("CategoryPreview", () => {
     expect(screen.getByText("P2")).toBeInTheDocument();
     expect(screen.getByText("P3")).toBeInTheDocument();
     expect(screen.getByText("P4")).toBeInTheDocument();
-
     // 5th should NOT render
     expect(screen.queryByText("P5")).not.toBeInTheDocument();
   });

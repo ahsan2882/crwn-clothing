@@ -1,9 +1,9 @@
+import { screen } from "@testing-library/react";
 import { useParams } from "react-router";
 import { Product } from "../../../models/product.model";
 import { useAppSelector } from "../../../store/hooks";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import Category from "../category.component";
-import { screen } from "@testing-library/react";
 
 jest.mock("../../../components/spinner/spinner.component", () => ({
   __esModule: true,

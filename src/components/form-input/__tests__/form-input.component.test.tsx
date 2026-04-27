@@ -1,6 +1,6 @@
 import { fireEvent, screen } from "@testing-library/react";
-import FormInput from "../form-input.component";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import FormInput from "../form-input.component";
 
 describe("FormInput", () => {
   const mockOnChange = jest.fn();

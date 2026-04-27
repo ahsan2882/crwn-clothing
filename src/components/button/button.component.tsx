@@ -36,7 +36,7 @@ const buttonMap = {
 
 const Button = memo(function Button({
   children,
-  type,
+  type = "button",
   buttonStyle,
   onClickHandler,
   isLoading,
@@ -45,7 +45,7 @@ const Button = memo(function Button({
   const CustomButton = getButton(buttonStyle);
   return (
     <CustomButton
-      type={type || "button"}
+      type={type}
       onClick={onClickHandler}
       disabled={isLoading}
       className={className}

@@ -1,11 +1,11 @@
-import { cartReducers } from "../cart.reducer";
 import {
   addItemToCart,
-  removeItemFromCart,
-  clearItemFromCart,
   clearCart,
+  clearItemFromCart,
+  removeItemFromCart,
   setIsCartOpen,
 } from "../cart.actions";
+import { cartReducers } from "../cart.reducer";
 
 describe("cart reducer", () => {
   const initialState = {

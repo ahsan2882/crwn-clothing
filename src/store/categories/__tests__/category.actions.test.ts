@@ -1,7 +1,7 @@
 import {
+  fetchCategoriesFailure,
   fetchCategoriesStart,
   fetchCategoriesSuccess,
-  fetchCategoriesFailure,
 } from "../category.actions";
 
 describe("category actions", () => {
@@ -21,6 +21,7 @@ describe("category actions", () => {
 
     expect(fetchCategoriesSuccess(payload)).toEqual({
       type: "category/fetchCategoriesSuccess",
+
       payload,
     });
   });

@@ -1,7 +1,7 @@
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { User } from "firebase/auth";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import PaymentForm from "../payment-form.component";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
 
 const mockConfirmCardPayment = jest.fn();
 const mockGetElement = jest.fn();
@@ -34,6 +34,14 @@ describe("Payment Form", () => {
   const mockUser: User = {
     displayName: "Ahsan",
   } as User;
+
+  beforeEach(() => {
+    mockConfirmCardPayment.mockReset();
+    mockGetElement.mockReset();
+    mockNavigate.mockReset();
+    (fetch as jest.Mock).mockReset();
+    (global.alert as jest.Mock).mockReset();
+  });
 
   it("renders payment form elements", () => {
     renderWithProviders(<PaymentForm />, {

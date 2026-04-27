@@ -1,13 +1,13 @@
+import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import { fireEvent, screen } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/tests/tests.utils";
-import SignInForm from "../sign-in-form.component";
+import { rootReducer } from "../../../store/root.reducer";
+import { RootState } from "../../../store/store";
 import {
   emailSignInStart,
   googleSignInStart,
 } from "../../../store/user/user.actions";
-import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import { rootReducer } from "../../../store/root.reducer";
-import { RootState } from "../../../store/store";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import SignInForm from "../sign-in-form.component";
 
 describe("SignInForm", () => {
   const renderComponent = (store?: EnhancedStore<RootState>) =>

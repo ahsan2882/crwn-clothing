@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import Button, { BUTTON_TYPE_CLASSES } from "../button.component";
 
 jest.mock("../button.styles", () => ({
@@ -42,7 +43,7 @@ const renderButton = (
   props: Partial<React.ComponentProps<typeof Button>> = {},
 ) => {
   const defaults = { type: "button" as const, children: "Click me" };
-  return render(<Button {...defaults} {...props} />);
+  return renderWithProviders(<Button {...defaults} {...props} />);
 };
 
 describe("Button - rendering", () => {
@@ -77,7 +78,7 @@ describe("Button - rendering", () => {
   });
 
   it("uses BaseButton when buttonStyle is not in map", () => {
-    render(<Button buttonStyle={"invalid" as any}>Test</Button>);
+    renderWithProviders(<Button buttonStyle={"invalid" as any}>Test</Button>);
 
     const btn = screen.getByRole("button");
     expect(btn).toBeInTheDocument();
@@ -157,7 +158,9 @@ describe("Button - click handler", () => {
 
 describe("Button - memoisation", () => {
   it("renders consistently when re-rendered with the same props", () => {
-    const { rerender } = render(<Button type="button">Hello</Button>);
+    const { rerender } = renderWithProviders(
+      <Button type="button">Hello</Button>,
+    );
     expect(screen.getByText("Hello")).toBeInTheDocument();
 
     rerender(<Button type="button">Hello</Button>);
@@ -165,7 +168,9 @@ describe("Button - memoisation", () => {
   });
 
   it("updates correctly when props change", () => {
-    const { rerender } = render(<Button type="button">Before</Button>);
+    const { rerender } = renderWithProviders(
+      <Button type="button">Before</Button>,
+    );
     expect(screen.getByText("Before")).toBeInTheDocument();
 
     rerender(<Button type="button">After</Button>);

@@ -1,15 +1,15 @@
 import {
   checkUserSession,
-  googleSignInStart,
   emailSignInStart,
-  signInSuccess,
+  googleSignInStart,
   signInFailed,
-  signUpStart,
-  signUpSuccess,
-  signUpFailed,
+  signInSuccess,
+  signOutFailed,
   signOutStart,
   signOutSuccess,
-  signOutFailed,
+  signUpFailed,
+  signUpStart,
+  signUpSuccess,
 } from "../user.actions";
 
 describe("user actions", () => {

@@ -1,10 +1,10 @@
 import { CartItemType, Product } from "../../../models/product.model";
 import {
-  setIsCartOpen,
   addItemToCart,
-  removeItemFromCart,
-  clearItemFromCart,
   clearCart,
+  clearItemFromCart,
+  removeItemFromCart,
+  setIsCartOpen,
 } from "../cart.actions";
 
 describe("cart actions", () => {

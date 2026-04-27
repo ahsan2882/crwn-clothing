@@ -66,6 +66,10 @@ describe("CheckoutItem - dispatch behavior", () => {
   });
   const dispatchSpy = jest.spyOn(store, "dispatch");
 
+  beforeEach(() => {
+    dispatchSpy.mockClear();
+  });
+
   it("dispatches addItemToCart when clicking increase", () => {
     renderWithProviders(<CheckoutItem cartItem={mockItem} />, { store });
     fireEvent.click(

@@ -1,10 +1,10 @@
-import { screen, fireEvent } from "@testing-library/react";
-import SignUpForm from "../sign-up-form.component";
-import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import { configureStore } from "@reduxjs/toolkit";
+import { fireEvent, screen } from "@testing-library/react";
+import { User } from "firebase/auth";
 import { rootReducer } from "../../../store/root.reducer";
 import { signUpStart } from "../../../store/user/user.actions";
-import { User } from "firebase/auth";
+import { renderWithProviders } from "../../../utils/tests/tests.utils";
+import SignUpForm from "../sign-up-form.component";
 
 jest.mock("../../form-input/form-input.component", () => ({
   __esModule: true,
@@ -37,6 +37,10 @@ const store = configureStore({
 const dispatchSpy = jest.spyOn(store, "dispatch") as jest.Mock;
 
 describe("SignUpForm", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("renders form correctly", () => {
     renderWithProviders(<SignUpForm />);
     expect(screen.getByText("Don't have an account?")).toBeInTheDocument();
@@ -68,7 +72,7 @@ describe("SignUpForm", () => {
   });
 
   it("shows alert when passwords do not match", () => {
-    renderWithProviders(<SignUpForm />);
+    renderWithProviders(<SignUpForm />, { store });
     fireEvent.change(screen.getByTestId("fullName"), {
       target: { name: "fullName", value: "John Doe" },
     });

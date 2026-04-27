@@ -1,6 +1,6 @@
+import { fireEvent, screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/tests/tests.utils";
 import DirectoryItem from "../directory-item.component";
-import { fireEvent, screen } from "@testing-library/react";
 
 // ---- mock useNavigate correctly ----
 const mockNavigate = jest.fn();
@@ -65,7 +65,7 @@ describe("DirectoryItem", () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it("calls navigate only once per interaction", () => {
+  it("calls navigate once per interaction (click + Enter = 2 calls)", () => {
     renderWithProviders(<DirectoryItem category={mockCategory} />);
     const button = screen.getByRole("button");
     fireEvent.click(button);
