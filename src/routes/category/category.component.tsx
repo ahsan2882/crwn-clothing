@@ -17,10 +17,14 @@ export default memo(function Category() {
   const categoriesMap = useAppSelector(selectCategoriesMap);
   const isLoading = useAppSelector(selectCategoriesIsLoading);
 
+  const normalizedCategory = useMemo(() => category?.trim() ?? "", [category]);
+
   const products: Product[] = useMemo(
     () =>
-      category ? (categoriesMap[category.trim().toLowerCase()] ?? []) : [],
-    [category, categoriesMap],
+      normalizedCategory
+        ? (categoriesMap[normalizedCategory.toLowerCase()] ?? [])
+        : [],
+    [normalizedCategory, categoriesMap],
   );
 
   return (
@@ -28,9 +32,11 @@ export default memo(function Category() {
       {isLoading ? (
         <Spinner />
       ) : (
-        category && (
+        normalizedCategory && (
           <>
-            <CategoryTitle>{category.toUpperCase()}</CategoryTitle>
+            <CategoryTitle>
+              {normalizedCategory.trim().toUpperCase()}
+            </CategoryTitle>
             <CategoryContainer>
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
